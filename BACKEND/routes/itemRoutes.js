@@ -9,6 +9,11 @@ import {
   updateItemStatus,
   deleteItem
 } from '../controllers/itemController.js';
+<<<<<<< HEAD
+=======
+import { auth, adminOnly } from '../middleware/auth.js';
+import { validateItem } from '../middleware/eventLogger.js';
+>>>>>>> a74e418 (Changes)
 
 const router = express.Router();
 
@@ -26,6 +31,7 @@ const storage = multer.diskStorage({
     }
 });
 
+<<<<<<< HEAD
 const upload = multer({ storage: storage });
 
 // Routes
@@ -74,5 +80,34 @@ router.patch('/:id', async (req, res) => {
 });
 
 router.delete('/:id', deleteItem); // Admin only
+=======
+// File type validation
+const fileFilter = (req, file, cb) => {
+    const allowedMimes = ['image/jpeg', 'image/png', 'image/gif', 'image/webp'];
+    if (allowedMimes.includes(file.mimetype)) {
+        cb(null, true);
+    } else {
+        cb(new Error('Only image files (jpeg, png, gif, webp) are allowed'), false);
+    }
+};
+
+const upload = multer({
+    storage: storage,
+    fileFilter,
+    limits: { fileSize: 5 * 1024 * 1024 } // 5 MB
+});
+
+// PUBLIC: GET all items (with optional ?status= and ?q= filters)
+router.get('/', getItems);
+
+// PROTECTED: POST new item — any authenticated user
+router.post('/', auth, upload.single('image'), validateItem, postItem);
+
+// PROTECTED: PATCH status — any authenticated user (owner/admin)
+router.patch('/:id', auth, updateItemStatus);
+
+// PROTECTED: DELETE item — admin only (RBAC enforcement)
+router.delete('/:id', auth, adminOnly, deleteItem);
+>>>>>>> a74e418 (Changes)
 
 export default router;
