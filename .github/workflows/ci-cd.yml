@@ -19,7 +19,7 @@ jobs:
           - 27017:27017
 
     env:
-      MONGO_URI: mongodb://localhost:27017/lostandfound_test
+      MONGO_URI: mongodb+srv://miguel:miguelito12@lostandfound.tpd9hq2.mongodb.net/?appName=lostandfound
       JWT_SECRET: test_secret_key_for_ci
       PORT: 5001
 

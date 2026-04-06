@@ -1,4 +1,5 @@
 import Item from '../models/itemModel.js';
+import { eventBus } from '../middleware/eventLogger.js';
 
 export const getItems = async (req, res) => {
   try {
@@ -47,6 +48,9 @@ export const postItem = async (req, res) => {
     const newItem = new Item(itemData);
     const savedItem = await newItem.save();
     
+    // Emit event for orchestration (notifications, analytics)
+    eventBus.emit('item:created', savedItem);
+    
     console.log('Item saved successfully:', savedItem);  // Debug log
     res.status(201).json(savedItem);
   } catch (err) {
@@ -67,6 +71,12 @@ export const postItem = async (req, res) => {
 export const updateItemStatus = async (req, res) => {
   try {
     const updated = await Item.findByIdAndUpdate(req.params.id, { status: req.body.status }, { new: true });
+    
+    // Emit event if item was claimed
+    if (req.body.status === 'claimed' && updated) {
+      eventBus.emit('item:claimed', updated);
+    }
+    
     res.json(updated);
   } catch (err) {
     res.status(500).json({ error: err.message });

@@ -1,0 +1,528 @@
+{
+  "info": {
+    "name": "Lost & Found @ TIP Manila - API Collection",
+    "description": "Complete API collection for System Integration Project",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{jwt_token}}",
+        "type": "string"
+      }
+    ]
+  },
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "http://localhost:5000",
+      "type": "string"
+    },
+    {
+      "key": "jwt_token",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "api_key",
+      "value": "",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "Health & Monitoring",
+      "item": [
+        {
+          "name": "Health Check",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/health",
+              "host": ["{{base_url}}"],
+              "path": ["health"]
+            }
+          }
+        },
+        {
+          "name": "Get Logs (Monitoring)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/monitor/logs",
+              "host": ["{{base_url}}"],
+              "path": ["api", "monitor", "logs"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Authentication",
+      "item": [
+        {
+          "name": "Register User",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 201) {",
+                  "    pm.collectionVariables.set('jwt_token', pm.response.json().token);",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"username\": \"john_doe\",\n  \"email\": \"john@tip.edu.ph\",\n  \"password\": \"SecurePass123!\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/api/auth/register",
+              "host": ["{{base_url}}"],
+              "path": ["api", "auth", "register"]
+            }
+          }
+        },
+        {
+          "name": "Login",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 200) {",
+                  "    pm.collectionVariables.set('jwt_token', pm.response.json().token);",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"john@tip.edu.ph\",\n  \"password\": \"SecurePass123!\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/api/auth/login",
+              "host": ["{{base_url}}"],
+              "path": ["api", "auth", "login"]
+            }
+          }
+        },
+        {
+          "name": "Get Current User",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/auth/me",
+              "host": ["{{base_url}}"],
+              "path": ["api", "auth", "me"]
+            }
+          }
+        },
+        {
+          "name": "Verify Student ID",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"studentId\": \"TIP-2023-001\",\n  \"studentName\": \"Juan Dela Cruz\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/api/auth/verify",
+              "host": ["{{base_url}}"],
+              "path": ["api", "auth", "verify"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Items (Lost & Found)",
+      "item": [
+        {
+          "name": "Get All Items",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/items",
+              "host": ["{{base_url}}"],
+              "path": ["api", "items"]
+            }
+          }
+        },
+        {
+          "name": "Get Lost Items",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/items?status=lost",
+              "host": ["{{base_url}}"],
+              "path": ["api", "items"],
+              "query": [
+                {"key": "status", "value": "lost"}
+              ]
+            }
+          }
+        },
+        {
+          "name": "Search Items",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/items?q=phone",
+              "host": ["{{base_url}}"],
+              "path": ["api", "items"],
+              "query": [
+                {"key": "q", "value": "phone"}
+              ]
+            }
+          }
+        },
+        {
+          "name": "Create Item (Lost/Found)",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"itemName\": \"Blue Backpack\",\n  \"description\": \"Blue JanSport backpack with laptop compartment\",\n  \"category\": \"accessories\",\n  \"dateLostOrFound\": \"2025-06-15\",\n  \"status\": \"lost\",\n  \"contactInfo\": \"09171234567\",\n  \"studentId\": \"TIP-2023-001\",\n  \"studentName\": \"Juan Dela Cruz\",\n  \"location\": \"Library 3rd Floor\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/api/items",
+              "host": ["{{base_url}}"],
+              "path": ["api", "items"]
+            }
+          }
+        },
+        {
+          "name": "Update Item Status",
+          "request": {
+            "method": "PATCH",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"status\": \"claimed\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/api/items/:id",
+              "host": ["{{base_url}}"],
+              "path": ["api", "items", ":id"],
+              "variable": [
+                {"key": "id", "value": "ITEM_ID_HERE"}
+              ]
+            }
+          }
+        },
+        {
+          "name": "Delete Item (Admin Only)",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/items/:id",
+              "host": ["{{base_url}}"],
+              "path": ["api", "items", ":id"],
+              "variable": [
+                {"key": "id", "value": "ITEM_ID_HERE"}
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Notifications",
+      "item": [
+        {
+          "name": "Get My Notifications",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/notifications",
+              "host": ["{{base_url}}"],
+              "path": ["api", "notifications"]
+            }
+          }
+        },
+        {
+          "name": "Get Unread Count",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/notifications/unread-count",
+              "host": ["{{base_url}}"],
+              "path": ["api", "notifications", "unread-count"]
+            }
+          }
+        },
+        {
+          "name": "Mark as Read",
+          "request": {
+            "method": "PATCH",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/notifications/:id/read",
+              "host": ["{{base_url}}"],
+              "path": ["api", "notifications", ":id", "read"],
+              "variable": [
+                {"key": "id", "value": "NOTIFICATION_ID"}
+              ]
+            }
+          }
+        },
+        {
+          "name": "Mark All as Read",
+          "request": {
+            "method": "PATCH",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/notifications/read-all",
+              "host": ["{{base_url}}"],
+              "path": ["api", "notifications", "read-all"]
+            }
+          }
+        },
+        {
+          "name": "Create Notification (Admin)",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"userId\": \"USER_ID_HERE\",\n  \"type\": \"system\",\n  \"title\": \"System Maintenance\",\n  \"message\": \"The system will undergo maintenance tonight.\",\n  \"priority\": \"high\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/api/notifications",
+              "host": ["{{base_url}}"],
+              "path": ["api", "notifications"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Analytics",
+      "item": [
+        {
+          "name": "Category Distribution (Public)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/analytics/category-distribution",
+              "host": ["{{base_url}}"],
+              "path": ["api", "analytics", "category-distribution"]
+            }
+          }
+        },
+        {
+          "name": "Success Rate (Public)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/analytics/success-rate?days=30",
+              "host": ["{{base_url}}"],
+              "path": ["api", "analytics", "success-rate"],
+              "query": [
+                {"key": "days", "value": "30"}
+              ]
+            }
+          }
+        },
+        {
+          "name": "Dashboard Stats (Admin)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/analytics/dashboard",
+              "host": ["{{base_url}}"],
+              "path": ["api", "analytics", "dashboard"]
+            }
+          }
+        },
+        {
+          "name": "Activity Trends (Admin)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/analytics/activity-trends?days=7",
+              "host": ["{{base_url}}"],
+              "path": ["api", "analytics", "activity-trends"],
+              "query": [
+                {"key": "days", "value": "7"}
+              ]
+            }
+          }
+        },
+        {
+          "name": "User Engagement (Admin)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/analytics/user-engagement?days=30",
+              "host": ["{{base_url}}"],
+              "path": ["api", "analytics", "user-engagement"],
+              "query": [
+                {"key": "days", "value": "30"}
+              ]
+            }
+          }
+        },
+        {
+          "name": "Record Analytics Event",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"eventType\": \"item_viewed\",\n  \"itemId\": \"ITEM_ID_HERE\",\n  \"metadata\": {\"source\": \"web\"}\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/api/analytics/event",
+              "host": ["{{base_url}}"],
+              "path": ["api", "analytics", "event"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "API Keys",
+      "item": [
+        {
+          "name": "Get My API Keys",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/keys",
+              "host": ["{{base_url}}"],
+              "path": ["api", "keys"]
+            }
+          }
+        },
+        {
+          "name": "Generate API Key",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 201) {",
+                  "    pm.collectionVariables.set('api_key', pm.response.json().key);",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"My Integration Key\",\n  \"permissions\": [\"read\", \"write\"]\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/api/keys",
+              "host": ["{{base_url}}"],
+              "path": ["api", "keys"]
+            }
+          }
+        },
+        {
+          "name": "Revoke API Key",
+          "request": {
+            "method": "PATCH",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/keys/:id/revoke",
+              "host": ["{{base_url}}"],
+              "path": ["api", "keys", ":id", "revoke"],
+              "variable": [
+                {"key": "id", "value": "API_KEY_ID"}
+              ]
+            }
+          }
+        },
+        {
+          "name": "Delete API Key",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/keys/:id",
+              "host": ["{{base_url}}"],
+              "path": ["api", "keys", ":id"],
+              "variable": [
+                {"key": "id", "value": "API_KEY_ID"}
+              ]
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

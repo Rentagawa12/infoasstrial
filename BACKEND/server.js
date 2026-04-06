@@ -6,56 +6,40 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 import itemRoutes from './routes/itemRoutes.js';
 import authRoutes from './routes/authRoutes.js';
-<<<<<<< HEAD
-import multer from 'multer';
-=======
+import notificationRoutes from './routes/notificationRoutes.js';
+import analyticsRoutes from './routes/analyticsRoutes.js';
+import apiKeyRoutes from './routes/apiKeyRoutes.js';
 import { requestLogger, getRecentLogs } from './middleware/eventLogger.js';
->>>>>>> a74e418 (Changes)
+import { initializeOrchestration } from './middleware/orchestration.js';
+import { rateLimit, mongoSanitize, securityHeaders } from './middleware/rateLimiter.js';
 import fs from 'fs';
 
 // Load environment variables
 dotenv.config();
 
-<<<<<<< HEAD
-// Set default values for environment variables
-=======
->>>>>>> a74e418 (Changes)
 const PORT = process.env.PORT || 5000;
 const MONGO_URI = process.env.MONGO_URI;
 
 const app = express();
 
-<<<<<<< HEAD
-// Enhanced CORS configuration
-app.use(cors({
-    origin: '*',  // Allow all origins during development
-=======
 // ── Security headers ─────────────────────────────────────────────────────────
-app.use((req, res, next) => {
-  res.setHeader('X-Content-Type-Options', 'nosniff');
-  res.setHeader('X-Frame-Options', 'DENY');
-  res.setHeader('X-XSS-Protection', '1; mode=block');
-  next();
-});
+app.use(securityHeaders);
 
 // ── CORS ──────────────────────────────────────────────────────────────────────
 app.use(cors({
     origin: '*',
->>>>>>> a74e418 (Changes)
     methods: ['GET', 'POST', 'PATCH', 'DELETE'],
-    allowedHeaders: ['Content-Type', 'Authorization'],
+    allowedHeaders: ['Content-Type', 'Authorization', 'X-API-Key'],
 }));
 
-<<<<<<< HEAD
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
-=======
 app.use(express.json({ limit: '10kb' }));
 app.use(express.urlencoded({ extended: true, limit: '10kb' }));
 
+// ── Security middleware ───────────────────────────────────────────────────────
+app.use(mongoSanitize);
+
 // ── Event-based request logger (message queue middleware) ─────────────────────
 app.use(requestLogger);
->>>>>>> a74e418 (Changes)
 
 // __dirname setup for ES modules
 const __filename = fileURLToPath(import.meta.url);
@@ -67,32 +51,21 @@ if (!fs.existsSync(uploadsDir)) {
     fs.mkdirSync(uploadsDir, { recursive: true });
 }
 
-<<<<<<< HEAD
-// Serve static files from FRONTEND directory
-app.use(express.static(path.join(__dirname, '../FRONTEND')));
-app.use('/uploads', express.static(uploadsDir));
-
-// Routes
-app.use('/api/items', itemRoutes);
-app.use('/api/auth', authRoutes);
-
-// Health check endpoint
-app.get('/health', (req, res) => {
-    res.json({ 
-        status: 'ok',
-        mongodb: mongoose.connection.readyState === 1 ? 'connected' : 'disconnected'
-    });
-});
-
-// MongoDB connection
-=======
 // Serve static files
 app.use(express.static(path.join(__dirname, '../FRONTEND')));
 app.use('/uploads', express.static(uploadsDir));
 
 // ── API Routes ────────────────────────────────────────────────────────────────
-app.use('/api/items', itemRoutes);
-app.use('/api/auth', authRoutes);
+// Public routes (with rate limiting)
+app.use('/api/items', rateLimit('public'), itemRoutes);
+app.use('/api/analytics', rateLimit('public'), analyticsRoutes);
+
+// Authentication routes (strict rate limiting)
+app.use('/api/auth', rateLimit('auth'), authRoutes);
+
+// Protected routes (authenticated rate limiting)
+app.use('/api/notifications', rateLimit('authenticated'), notificationRoutes);
+app.use('/api/keys', rateLimit('authenticated'), apiKeyRoutes);
 
 // ── Health / Monitoring endpoint ──────────────────────────────────────────────
 app.get('/health', (req, res) => {
@@ -117,29 +90,24 @@ app.use((err, req, res, next) => {
 });
 
 // ── MongoDB + Server start ────────────────────────────────────────────────────
->>>>>>> a74e418 (Changes)
 mongoose.connect(MONGO_URI, {
     useNewUrlParser: true,
     useUnifiedTopology: true
 })
 .then(() => {
     console.log('Connected to MongoDB');
+    
+    // Initialize API orchestration layer
+    initializeOrchestration();
+    
     app.listen(PORT, () => {
-<<<<<<< HEAD
-        console.log('server running on port ' + PORT);
-        console.log('server url: http://localhost:' + PORT);
-=======
         console.log('Server running on port ' + PORT);
         console.log('Server URL: http://localhost:' + PORT);
->>>>>>> a74e418 (Changes)
     });
 })
 .catch((err) => {
     console.error('MongoDB connection error:', err.message);
     process.exit(1);
 });
-<<<<<<< HEAD
-=======
 
 export default app;
->>>>>>> a74e418 (Changes)

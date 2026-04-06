@@ -10,7 +10,7 @@
        environment:
          - NODE_ENV=production
          - PORT=5000  # Match the port exposed in Dockerfile
-         - MONGO_URI=mongodb+srv://storeadmin:admin12345@cluster0.hzdvdne.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0
+         - MONGO_URI=mongodb+srv://miguel:miguelito12@lostandfound.tpd9hq2.mongodb.net/?appName=lostandfound
        volumes:
          - uploads_data:/app/BACKEND/uploads
        restart: unless-stopped

@@ -1,5 +1,6 @@
 import User from '../models/userModel.js';
 import jwt from 'jsonwebtoken';
+import { eventBus } from '../middleware/eventLogger.js';
 
 // Register new user
 export const register = async (req, res) => {
@@ -24,6 +25,9 @@ export const register = async (req, res) => {
       process.env.JWT_SECRET,
       { expiresIn: '24h' }
     );
+    
+    // Emit event for orchestration
+    eventBus.emit('user:registered', user);
 
     res.status(201).json({
       message: 'User registered successfully',
@@ -63,6 +67,9 @@ export const login = async (req, res) => {
       process.env.JWT_SECRET,
       { expiresIn: '24h' }
     );
+    
+    // Emit event for orchestration
+    eventBus.emit('user:login', user);
 
     res.json({
       message: 'Login successful',
