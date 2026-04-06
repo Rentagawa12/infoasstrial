@@ -31,12 +31,10 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: '18'
-          cache: 'npm'
-          cache-dependency-path: BACKEND/package-lock.json
 
       - name: Install dependencies
         working-directory: BACKEND
-        run: npm ci
+        run: npm install
 
       - name: Run integration tests
         working-directory: BACKEND
@@ -66,7 +64,7 @@ jobs:
         uses: docker/build-push-action@v5
         with:
           context: .
-          file: Dockerfiles/Dockerfile
+          file: ./Dockerfile
           push: true
           tags: |
             ${{ secrets.DOCKER_USERNAME }}/lostandfound-tip:latest
