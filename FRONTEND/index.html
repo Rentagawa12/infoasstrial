@@ -1390,7 +1390,10 @@
   </div>
 
   <script>
-    const API_URL = 'https://infoassproj.onrender.com/api';
+    // Dynamic API URL - works for both local and deployed environments
+    const API_URL = window.location.hostname === 'localhost' 
+      ? 'http://localhost:5000/api'
+      : `${window.location.origin}/api`;
     let isServerConnected = false;
 
     // Function to check server connection
