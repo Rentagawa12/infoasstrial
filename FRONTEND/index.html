@@ -1,0 +1,1708 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lost & Found @ TIP Manila</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<style>
+  /* Modern Design System */
+  :root {
+    --primary: #ffc20e;
+    --primary-dark: #e6ae0d;
+    --primary-light: #ffd54f;
+    --accent: #f37021;
+    --accent-dark: #d85d0f;
+    --accent-light: #ff8a50;
+    --black: #1a1a1a;
+    --dark-gray: #2d2d2d;
+    --text: #4a4a4a;
+    --text-light: #6e6e6e;
+    --white: #ffffff;
+    --light-gray: #f8f9fa;
+    --border: #e1e1e1;
+    --success: #28a745;
+    --danger: #dc3545;
+    --warning: #ffc107;
+    --info: #17a2b8;
+    
+    /* Glass Effect Colors */
+    --glass-bg: rgba(255, 255, 255, 0.1);
+    --glass-border: rgba(255, 255, 255, 0.2);
+    --glass-shadow: rgba(0, 0, 0, 0.1);
+    
+    /* Enhanced Shadows */
+    --shadow-sm: 0 2px 4px rgba(0,0,0,0.05);
+    --shadow-md: 0 4px 8px rgba(0,0,0,0.1);
+    --shadow-lg: 0 8px 16px rgba(0,0,0,0.1);
+    --shadow-xl: 0 20px 40px rgba(0,0,0,0.1);
+    
+    /* Refined Border Radius */
+    --radius-sm: 8px;
+    --radius-md: 12px;
+    --radius-lg: 16px;
+    --radius-xl: 24px;
+    
+    /* Gradients */
+    --gradient-primary: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+    --gradient-accent: linear-gradient(135deg, var(--accent) 0%, var(--accent-light) 100%);
+    --gradient-dark: linear-gradient(135deg, var(--black) 0%, var(--dark-gray) 100%);
+  }
+
+  /* Base Styles */
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+
+  body {
+    font-family: 'Poppins', sans-serif;
+    background: var(--light-gray);
+    color: var(--text);
+    line-height: 1.6;
+  }
+
+  /* Enhanced Home Page */
+  .home-container {
+    min-height: 100vh;
+    position: relative;
+    background: linear-gradient(135deg, rgba(0,0,0,0.9), rgba(0,0,0,0.8)),
+                url('https://www.tip.edu.ph/assets/Uploads/TIP-Manila-1.jpg');
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+    color: var(--white);
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem;
+  }
+
+  .home-background {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: 
+        radial-gradient(circle at 20% 30%, rgba(243, 112, 33, 0.15) 0%, transparent 60%),
+        radial-gradient(circle at 80% 70%, rgba(255, 194, 14, 0.15) 0%, transparent 60%);
+    z-index: 1;
+  }
+
+  .home-content {
+    position: relative;
+    z-index: 2;
+    max-width: 1400px;
+    width: 100%;
+    display: grid;
+    grid-template-columns: 1.2fr 0.8fr;
+    gap: 4rem;
+    align-items: center;
+    padding: 2rem;
+    background: var(--glass-bg);
+    backdrop-filter: blur(10px);
+    border: 1px solid var(--glass-border);
+    border-radius: var(--radius-lg);
+    box-shadow: 0 8px 32px var(--glass-shadow);
+  }
+
+  .home-text {
+    padding-right: 2rem;
+  }
+
+  .home-logo {
+    width: 180px;
+    height: auto;
+    margin-bottom: 2rem;
+    filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.2));
+  }
+
+  .home-title {
+    font-size: 4rem;
+    font-weight: 800;
+    color: var(--white);
+    line-height: 1.2;
+    margin-bottom: 1.5rem;
+    text-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    letter-spacing: -1px;
+  }
+
+  .home-title span {
+    color: var(--primary);
+    position: relative;
+    display: inline-block;
+  }
+
+  .home-title span::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 4px;
+    background: var(--primary);
+    border-radius: 2px;
+  }
+
+  .home-description {
+    color: rgba(255, 255, 255, 0.9);
+    font-size: 1.3rem;
+    line-height: 1.8;
+    margin-bottom: 3rem;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  }
+
+  .home-features {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.5rem;
+    margin-bottom: 3rem;
+  }
+
+  .feature-item {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1.2rem;
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid var(--glass-border);
+    border-radius: var(--radius-md);
+    transition: all 0.3s ease;
+    backdrop-filter: blur(5px);
+  }
+
+  .feature-item:hover {
+    transform: translateY(-5px);
+    background: rgba(255, 255, 255, 0.15);
+    border-color: var(--primary);
+  }
+
+  .feature-icon {
+    width: 45px;
+    height: 45px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--primary);
+    border-radius: var(--radius-sm);
+    color: var(--black);
+    font-size: 1.4rem;
+    transition: all 0.3s ease;
+  }
+
+  .feature-item:hover .feature-icon {
+    transform: scale(1.1) rotate(-5deg);
+    background: var(--white);
+    color: var(--primary);
+  }
+
+  .feature-text {
+    font-size: 1.1rem;
+    font-weight: 500;
+    color: var(--white);
+  }
+
+  .start-button {
+    display: inline-flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1.2rem 2.5rem;
+    background: var(--primary);
+    color: var(--black);
+    font-size: 1.2rem;
+    font-weight: 600;
+    border: none;
+    border-radius: var(--radius-md);
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(255, 194, 14, 0.3);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .start-button::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    transform: translateX(-100%);
+    transition: transform 0.6s ease;
+  }
+
+  .start-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(255, 194, 14, 0.4);
+  }
+
+  .start-button:hover::before {
+    transform: translateX(100%);
+  }
+
+  .home-visual {
+    position: relative;
+  }
+
+  .visual-card {
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid var(--glass-border);
+    border-radius: var(--radius-lg);
+    backdrop-filter: blur(10px);
+    padding: 2.5rem;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 8px 32px var(--glass-shadow);
+  }
+
+  .visual-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: var(--gradient-primary);
+  }
+
+  .card-content {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+
+  .card-item {
+    display: flex;
+    align-items: center;
+    gap: 1.2rem;
+    padding: 1.2rem;
+    background: rgba(255, 255, 255, 0.95);
+    border-radius: var(--radius-md);
+    transition: all 0.3s ease;
+    cursor: pointer;
+    border: 2px solid transparent;
+  }
+
+  .card-item:hover {
+    transform: translateX(10px);
+    background: var(--primary);
+    border-color: var(--primary-dark);
+  }
+
+  .card-icon {
+    font-size: 1.8rem;
+    color: var(--accent);
+    transition: all 0.3s ease;
+  }
+
+  .card-item:hover .card-icon {
+    color: var(--black);
+    transform: scale(1.1) rotate(-5deg);
+  }
+
+  .card-text {
+    font-weight: 600;
+    font-size: 1.1rem;
+    color: var(--text);
+    transition: all 0.3s ease;
+  }
+
+  .card-item:hover .card-text {
+    color: var(--black);
+  }
+
+  /* Responsive Design Updates */
+  @media (max-width: 1200px) {
+    .home-content {
+      grid-template-columns: 1fr;
+      max-width: 800px;
+    }
+
+    .home-text {
+      padding-right: 0;
+      text-align: center;
+    }
+
+    .home-features {
+      justify-content: center;
+    }
+
+    .home-logo {
+      margin: 0 auto 2rem;
+    }
+
+    .start-button {
+      margin: 0 auto;
+    }
+  }
+
+  @media (max-width: 768px) {
+    .home-container {
+      padding: 1rem;
+    }
+
+    .home-content {
+      padding: 1.5rem;
+    }
+
+    .home-title {
+      font-size: 2.8rem;
+    }
+
+    .home-description {
+      font-size: 1.1rem;
+    }
+
+    .home-features {
+      grid-template-columns: 1fr;
+    }
+
+    .feature-item {
+      padding: 1rem;
+    }
+
+    .visual-card {
+      padding: 1.5rem;
+    }
+
+    .card-item {
+      padding: 1rem;
+    }
+  }
+
+  /* Enhanced Verification Modal */
+  .verification-modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.4);
+    backdrop-filter: blur(8px);
+    z-index: 1000;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+  }
+
+  .verification-modal.show {
+    opacity: 1;
+  }
+
+  .verification-form {
+    background: var(--white);
+    padding: 2.5rem;
+    border-radius: var(--radius-lg);
+    width: 90%;
+    max-width: 500px;
+    box-shadow: var(--shadow-xl);
+    transform: translateY(20px);
+    transition: transform 0.3s ease;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .verification-form::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: var(--gradient-primary);
+  }
+
+  .verification-modal.show .verification-form {
+    transform: translateY(0);
+  }
+
+  .verification-form h2 {
+    font-size: 2rem;
+    color: var(--black);
+    margin-bottom: 2rem;
+    text-align: center;
+    font-weight: 700;
+  }
+
+  .input-group {
+    margin-bottom: 1.5rem;
+    position: relative;
+  }
+
+  .input-group i {
+    position: absolute;
+    left: 1rem;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--text-light);
+    transition: color 0.3s ease;
+  }
+
+  .input-group input {
+    width: 100%;
+    padding: 1rem 1rem 1rem 3rem;
+    border: 2px solid var(--border);
+    border-radius: var(--radius-md);
+    font-size: 1rem;
+    transition: all 0.3s ease;
+    background: var(--light-gray);
+  }
+
+  .input-group input:focus {
+    border-color: var(--primary);
+    background: var(--white);
+    box-shadow: 0 0 0 4px rgba(255,194,14,0.1);
+    outline: none;
+  }
+
+  .input-group input:focus + i {
+    color: var(--primary);
+  }
+
+  /* Main App Styles */
+  .main-app {
+    display: none;
+    min-height: 100vh;
+    background: var(--light-gray);
+    padding-top: 80px;
+  }
+
+  /* Enhanced Header */
+  header {
+    background: var(--white);
+    box-shadow: var(--shadow-md);
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 100;
+    border-bottom: 3px solid var(--primary);
+  }
+
+  .header-content {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 1rem 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .header-left {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+  }
+
+  .header-logo {
+    width: 120px;
+    height: auto;
+    transition: transform 0.3s ease;
+  }
+
+  .header-logo:hover {
+    transform: scale(1.05);
+  }
+
+  .header-title {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: var(--black);
+    position: relative;
+  }
+
+  .header-title::after {
+    content: '';
+    position: absolute;
+    bottom: -4px;
+    left: 0;
+    width: 40px;
+    height: 3px;
+    background: var(--primary);
+    border-radius: 2px;
+    transition: width 0.3s ease;
+  }
+
+  .header-title:hover::after {
+    width: 100%;
+  }
+
+  #studentInfo {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    font-size: 0.95rem;
+    background: var(--light-gray);
+    padding: 0.75rem 1.5rem;
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-sm);
+  }
+
+  .sign-out-btn {
+    background: var(--accent);
+    color: var(--white);
+    border: none;
+    padding: 0.75rem 1.5rem;
+    border-radius: var(--radius-md);
+    cursor: pointer;
+    font-size: 0.95rem;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .sign-out-btn::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(45deg, transparent, rgba(255,255,255,0.2), transparent);
+    transform: translateX(-100%);
+    transition: transform 0.6s ease;
+  }
+
+  .sign-out-btn:hover {
+    background: var(--accent-dark);
+    transform: translateY(-2px);
+  }
+
+  .sign-out-btn:hover::before {
+    transform: translateX(100%);
+  }
+
+  /* Main Content Area */
+  .main-content {
+    max-width: 1400px;
+    margin: 2rem auto;
+    padding: 0 2rem;
+    display: grid;
+    grid-template-columns: 400px 1fr;
+    gap: 3rem;
+    position: relative;
+  }
+
+  /* Enhanced Form Container */
+  .form-container {
+    background: var(--white);
+    padding: 2.5rem;
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-lg);
+    position: sticky;
+    top: 100px;
+    height: fit-content;
+    border: 1px solid var(--border);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    max-width: 800px;
+    margin: 0 auto;
+  }
+
+  .form-container:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--shadow-xl);
+  }
+
+  .form-title {
+    font-size: 1.8rem;
+    color: var(--black);
+    margin-bottom: 2rem;
+    padding-bottom: 1rem;
+    border-bottom: 3px solid var(--primary);
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    justify-content: center;
+    text-align: center;
+  }
+
+  .form-title i {
+    color: var(--primary);
+  }
+
+  .form-grid {
+    display: grid;
+    gap: 2rem;
+    max-width: 700px;
+    margin: 0 auto;
+  }
+
+  .form-section {
+    background: var(--light-gray);
+    padding: 2rem;
+    border-radius: var(--radius-md);
+    border: 1px solid var(--border);
+    transition: all 0.3s ease;
+    margin: 0 auto;
+  }
+
+  .form-section:hover {
+    background: var(--white);
+    box-shadow: var(--shadow-md);
+    border-color: var(--primary);
+    transform: translateY(-2px);
+  }
+
+  .form-row {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.5rem;
+    align-items: start;
+  }
+
+  .form-hint {
+    margin-top: 0.5rem;
+    font-size: 0.9rem;
+    color: var(--text-light);
+    font-style: italic;
+    text-align: center;
+  }
+
+  @media (max-width: 768px) {
+    .form-row {
+      grid-template-columns: 1fr;
+    }
+    
+    .form-container {
+      padding: 1.5rem;
+    }
+    
+    .form-section {
+      padding: 1.5rem;
+    }
+  }
+
+  .form-group {
+    position: relative;
+    margin-bottom: 1rem;
+  }
+
+  .form-group label {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-weight: 600;
+    color: var(--text);
+    margin-bottom: 0.8rem;
+    font-size: 1rem;
+  }
+
+  .form-group label i {
+    color: var(--primary);
+    font-size: 1.1rem;
+  }
+
+  .form-control {
+    width: 100%;
+    padding: 1rem;
+    border: 2px solid var(--border);
+    border-radius: var(--radius-md);
+    font-size: 1rem;
+    transition: all 0.3s ease;
+    background: var(--white);
+  }
+
+  .form-control:focus {
+    border-color: var(--primary);
+    background: var(--white);
+    box-shadow: 0 0 0 4px rgba(255,194,14,0.1);
+    outline: none;
+  }
+
+  .form-control::placeholder {
+    color: var(--text-light);
+    opacity: 0.7;
+  }
+
+  select.form-control {
+    cursor: pointer;
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 1rem center;
+    background-size: 1.2em;
+    padding-right: 2.5rem;
+  }
+
+  textarea.form-control {
+    min-height: 120px;
+    resize: vertical;
+  }
+
+  input[type="date"].form-control {
+    cursor: pointer;
+  }
+
+  input[type="file"].form-control {
+    padding: 0.8rem;
+    cursor: pointer;
+  }
+
+  input[type="file"].form-control::file-selector-button {
+    padding: 0.5rem 1rem;
+    border-radius: var(--radius-md);
+    border: none;
+    background: var(--primary);
+    color: var(--black);
+    font-weight: 600;
+    margin-right: 1rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+
+  input[type="file"].form-control::file-selector-button:hover {
+    background: var(--primary-dark);
+  }
+
+  .submit-btn {
+    background: var(--gradient-primary);
+    color: var(--black);
+    border: none;
+    padding: 1.2rem;
+    border-radius: var(--radius-md);
+    font-size: 1.1rem;
+    font-weight: 600;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.75rem;
+    transition: all 0.3s ease;
+    margin: 2rem auto 0;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    position: relative;
+    overflow: hidden;
+    width: 100%;
+    max-width: 300px;
+  }
+
+  .submit-btn::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(45deg, transparent, rgba(255,255,255,0.3), transparent);
+    transform: translateX(-100%);
+    transition: transform 0.6s ease;
+  }
+
+  .submit-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(255,194,14,0.3);
+  }
+
+  .submit-btn:hover::before {
+    transform: translateX(100%);
+  }
+
+  .submit-btn i {
+    font-size: 1.2rem;
+  }
+
+  /* Image Preview Styles */
+  .image-preview {
+    margin: 1rem auto;
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-md);
+    transition: transform 0.3s ease;
+    cursor: pointer;
+    display: block;
+  }
+
+  .image-preview:hover {
+    transform: scale(1.05);
+  }
+
+  /* Enhanced Card Grid Layout */
+  .content-right {
+    padding: 1rem;
+    background: var(--light-gray);
+    border-radius: var(--radius-lg);
+    min-height: calc(100vh - 120px);
+  }
+
+  .items-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+    gap: 2rem;
+    padding: 1.5rem;
+  }
+
+  /* Enhanced Card Design */
+  .item-card {
+    background: var(--white);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    box-shadow: var(--shadow-md);
+    border: 1px solid var(--border);
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+  }
+
+  .item-card:hover {
+    transform: translateY(-8px);
+    box-shadow: var(--shadow-xl);
+  }
+
+  .item-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: var(--gradient-primary);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+  }
+
+  .item-card:hover::before {
+    opacity: 1;
+  }
+
+  .item-image-container {
+    position: relative;
+    width: 100%;
+    height: 240px;
+    background: linear-gradient(45deg, var(--light-gray), #f0f0f0);
+    overflow: hidden;
+  }
+
+  .item-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .item-card:hover .item-image {
+    transform: scale(1.08);
+  }
+
+  .item-content {
+    padding: 2rem;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+
+  .item-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 1rem;
+  }
+
+  .item-title {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--black);
+    line-height: 1.3;
+    margin-bottom: 0.5rem;
+  }
+
+  /* Enhanced Status Badge */
+  .status-badge {
+    padding: 0.6rem 1.2rem;
+    border-radius: 30px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: all 0.3s ease;
+  }
+
+  .status-badge.lost {
+    background: #fff5f5;
+    color: #e53e3e;
+    border: 1px solid rgba(229, 62, 62, 0.2);
+  }
+
+  .status-badge.found {
+    background: #f0fff4;
+    color: #38a169;
+    border: 1px solid rgba(56, 161, 105, 0.2);
+  }
+
+  .status-badge.claimed {
+    background: #ebf8ff;
+    color: #3182ce;
+    border: 1px solid rgba(49, 130, 206, 0.2);
+  }
+
+  .item-details {
+    color: var(--text);
+    line-height: 1.7;
+    font-size: 1.05rem;
+    flex: 1;
+  }
+
+  /* Enhanced Item Meta */
+  .item-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.2rem;
+    padding-top: 1.5rem;
+    margin-top: auto;
+    border-top: 1px solid var(--border);
+  }
+
+  .meta-item {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    font-size: 0.95rem;
+    color: var(--text-light);
+    transition: color 0.3s ease;
+  }
+
+  .meta-item i {
+    color: var(--primary);
+    font-size: 1.1rem;
+  }
+
+  .item-card:hover .meta-item {
+    color: var(--text);
+  }
+
+  /* Enhanced Item Footer */
+  .item-footer {
+    margin-top: 1.5rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--border);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  /* Enhanced Claim Button */
+  .claim-button {
+    background: var(--gradient-accent);
+    color: var(--white);
+    border: none;
+    padding: 1rem 2rem;
+    border-radius: var(--radius-md);
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    transition: all 0.3s ease;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .claim-button::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(45deg, transparent, rgba(255,255,255,0.2), transparent);
+    transform: translateX(-100%);
+    transition: transform 0.6s ease;
+  }
+
+  .claim-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(243, 112, 33, 0.2);
+  }
+
+  .claim-button:hover::before {
+    transform: translateX(100%);
+  }
+
+  /* Enhanced Expiration Badge */
+  .expiration-badge {
+    padding: 0.6rem 1.2rem;
+    border-radius: 25px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+    transition: all 0.3s ease;
+  }
+
+  .expiration-badge.active {
+    background: #e5ffe5;
+    color: #28a745;
+    border: 1px solid rgba(40, 167, 69, 0.2);
+  }
+
+  .expiration-badge.expiring-soon {
+    background: #fff3cd;
+    color: #856404;
+    border: 1px solid rgba(133, 100, 4, 0.2);
+    animation: pulse 2s infinite;
+  }
+
+  .expiration-badge.expired {
+    background: #ffe5e5;
+    color: #dc3545;
+    border: 1px solid rgba(220, 53, 69, 0.2);
+  }
+
+  @keyframes pulse {
+    0% { opacity: 1; }
+    50% { opacity: 0.7; }
+    100% { opacity: 1; }
+  }
+
+  /* Enhanced Empty State */
+  .empty-state {
+    text-align: center;
+    padding: 4rem 2rem;
+    background: var(--white);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-md);
+    margin: 2rem;
+  }
+
+  .empty-state i {
+    font-size: 4rem;
+    color: var(--primary);
+    margin-bottom: 1.5rem;
+    opacity: 0.8;
+  }
+
+  .empty-state h3 {
+    font-size: 1.8rem;
+    color: var(--black);
+    margin-bottom: 1rem;
+  }
+
+  .empty-state p {
+    color: var(--text-light);
+    font-size: 1.1rem;
+    max-width: 500px;
+    margin: 0 auto 1.5rem;
+  }
+
+  /* Responsive Adjustments */
+  @media (max-width: 1200px) {
+    .main-content {
+      grid-template-columns: 1fr;
+      gap: 2rem;
+    }
+
+    .form-container {
+      position: relative;
+      top: 0;
+      max-width: 100%;
+    }
+  }
+
+  @media (max-width: 768px) {
+    .main-content {
+      padding: 0 1rem;
+    }
+
+    .items-grid {
+      grid-template-columns: 1fr;
+      gap: 1.5rem;
+      padding: 1rem;
+    }
+
+    .item-card {
+      margin-bottom: 1rem;
+    }
+
+    .item-content {
+      padding: 1.5rem;
+    }
+
+    .item-title {
+      font-size: 1.3rem;
+    }
+
+    .item-meta {
+      flex-direction: column;
+      gap: 1rem;
+    }
+  }
+</style>
+</head>
+<body>
+  <!-- Enhanced Home Page -->
+  <div class="home-container" id="homePage">
+    <div class="home-background"></div>
+    <div class="home-content">
+      <div class="home-text">
+        <img src="tip_logo.png" alt="TIP Logo" class="home-logo">
+        <h1 class="home-title">Lost & Found @ <span>TIP Manila</span></h1>
+        <p class="home-description">
+          Lost something on campus? Or found someone else's belongings? 
+          Our Lost & Found system makes it easy to report and locate missing items within the TIP Manila community.
+        </p>
+        <div class="home-features">
+          <div class="feature-item">
+            <div class="feature-icon">
+              <i class="fas fa-search"></i>
+            </div>
+            <span class="feature-text">Easy Item Search</span>
+          </div>
+          <div class="feature-item">
+            <div class="feature-icon">
+              <i class="fas fa-shield-alt"></i>
+            </div>
+            <span class="feature-text">Secure System</span>
+          </div>
+          <div class="feature-item">
+            <div class="feature-icon">
+              <i class="fas fa-clock"></i>
+            </div>
+            <span class="feature-text">Quick Recovery</span>
+          </div>
+          <div class="feature-item">
+            <div class="feature-icon">
+              <i class="fas fa-users"></i>
+            </div>
+            <span class="feature-text">Community Support</span>
+          </div>
+        </div>
+        <button class="start-button" onclick="showVerification()">
+          Get Started
+          <i class="fas fa-arrow-right"></i>
+        </button>
+      </div>
+      <div class="home-visual">
+        <div class="visual-card">
+          <div class="card-content">
+            <div class="card-item" onclick="quickFilter('electronics', 'Phones')">
+              <i class="fas fa-mobile-alt card-icon"></i>
+              <span class="card-text">Lost Phones</span>
+            </div>
+            <div class="card-item" onclick="quickFilter('accessories', 'Wallets')">
+              <i class="fas fa-wallet card-icon"></i>
+              <span class="card-text">Lost Wallets</span>
+            </div>
+            <div class="card-item" onclick="quickFilter('books', 'Books')">
+              <i class="fas fa-book card-icon"></i>
+              <span class="card-text">Lost Books</span>
+            </div>
+            <div class="card-item" onclick="quickFilter('documents', 'IDs')">
+              <i class="fas fa-id-card card-icon"></i>
+              <span class="card-text">Lost IDs</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Enhanced Verification Modal -->
+  <div class="verification-modal" id="verificationModal">
+    <div class="verification-form">
+      <h2>Student Verification</h2>
+      <form id="studentVerificationForm">
+        <div class="input-group">
+          <input type="text" id="studentId" name="studentId" placeholder="Enter your Student ID" required>
+          <i class="fas fa-id-card"></i>
+        </div>
+        <div class="input-group">
+          <input type="text" id="studentName" name="studentName" placeholder="Enter your Full Name" required>
+          <i class="fas fa-user"></i>
+        </div>
+        <button type="submit" class="start-button">
+          Continue to Dashboard
+          <i class="fas fa-arrow-right"></i>
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Main App -->
+  <div class="main-app" id="mainApp">
+    <header>
+      <div class="header-content">
+        <div class="header-left">
+          <img src="tip_logo.png" alt="TIP Logo" class="header-logo">
+          <h1 class="header-title">Lost & Found @ TIP Manila</h1>
+        </div>
+        <div id="studentInfo">
+          <span id="displayStudentInfo"></span>
+          <button class="sign-out-btn" onclick="signOut()">
+            <i class="fas fa-sign-out-alt"></i> Sign Out
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <div class="main-content">
+      <div class="form-container">
+        <h2 class="form-title">
+          <i class="fas fa-clipboard-list"></i>
+          Report Lost or Found Item
+        </h2>
+        <form id="itemForm" class="form-grid">
+          <div class="form-section">
+            <div class="form-group">
+              <label for="itemName">
+                <i class="fas fa-tag"></i>
+                Item Name
+              </label>
+              <input type="text" id="itemName" name="itemName" class="form-control" required 
+                placeholder="Enter item name (e.g., iPhone 12, Blue Wallet)">
+            </div>
+            
+            <div class="form-row">
+              <div class="form-group">
+                <label for="category">
+                  <i class="fas fa-folder"></i>
+                  Category
+                </label>
+                <select id="category" name="category" class="form-control" required>
+                  <option value="">Select Category</option>
+                  <option value="electronics">Electronics (Phones, Laptops, etc.)</option>
+                  <option value="accessories">Accessories (Jewelry, Watches, etc.)</option>
+                  <option value="documents">Documents (IDs, Cards, etc.)</option>
+                  <option value="clothing">Clothing & Bags</option>
+                  <option value="books">Books & Notes</option>
+                  <option value="others">Others</option>
+                </select>
+              </div>
+              
+              <div class="form-group">
+                <label for="status">
+                  <i class="fas fa-info-circle"></i>
+                  Status
+                </label>
+                <select id="status" name="status" class="form-control" required>
+                  <option value="">Select Status</option>
+                  <option value="lost">Lost</option>
+                  <option value="found">Found</option>
+                </select>
+              </div>
+            </div>
+          </div>
+
+          <div class="form-section">
+            <div class="form-group">
+              <label for="description">
+                <i class="fas fa-align-left"></i>
+                Description
+              </label>
+              <textarea id="description" name="description" class="form-control" required 
+                placeholder="Provide detailed description including color, brand, distinguishing marks, etc."></textarea>
+            </div>
+          </div>
+
+          <div class="form-section">
+            <div class="form-row">
+              <div class="form-group">
+                <label for="dateLostOrFound">
+                  <i class="fas fa-calendar"></i>
+                  Date
+                </label>
+                <input type="date" id="dateLostOrFound" name="dateLostOrFound" class="form-control" required>
+              </div>
+              
+              <div class="form-group">
+                <label for="contactInfo">
+                  <i class="fas fa-phone"></i>
+                  Contact
+                </label>
+                <input type="text" id="contactInfo" name="contactInfo" class="form-control" required 
+                  placeholder="Enter contact number or email">
+              </div>
+            </div>
+          </div>
+
+          <div class="form-section">
+            <div class="form-group">
+              <label for="imageFile">
+                <i class="fas fa-image"></i>
+                Image (Optional)
+              </label>
+              <input type="file" id="imageFile" name="image" class="form-control" accept="image/*">
+              <div class="form-hint">Upload a clear image of the item to help with identification</div>
+            </div>
+          </div>
+
+          <button type="submit" class="submit-btn">
+            <i class="fas fa-plus"></i>
+            Submit Item
+          </button>
+        </form>
+      </div>
+
+      <!-- Right Side Content -->
+      <div class="content-right">
+        <!-- Filters Container -->
+        <div class="filters-container">
+          <h3>
+            <i class="fas fa-filter"></i>
+            Filters
+          </h3>
+          <div class="filters-grid">
+            <select id="statusFilter" class="form-control">
+              <option value="">All Status</option>
+              <option value="lost">Lost</option>
+              <option value="found">Found</option>
+              <option value="claimed">Claimed</option>
+            </select>
+            <select id="categoryFilter" class="form-control">
+              <option value="">All Categories</option>
+              <option value="electronics">Electronics</option>
+              <option value="accessories">Accessories</option>
+              <option value="documents">Documents</option>
+              <option value="clothing">Clothing & Bags</option>
+              <option value="books">Books & Notes</option>
+              <option value="others">Others</option>
+            </select>
+            <input type="text" id="searchFilter" class="form-control" placeholder="Search items...">
+          </div>
+        </div>
+
+        <!-- Items Grid -->
+        <div class="items-grid" id="itemsContainer">
+          <!-- Items will be dynamically added here -->
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const API_URL = 'https://infoassproj.onrender.com/api';
+    let isServerConnected = false;
+
+    // Function to check server connection
+    async function checkServerConnection() {
+      try {
+        const response = await fetch(API_URL + '/items');
+        if (response.ok) {
+          isServerConnected = true;
+          return true;
+        }
+        throw new Error('Server response not OK');
+      } catch (err) {
+        console.error('Server connection error:', err);
+        isServerConnected = false;
+        alert('Unable to connect to the server. Please make sure:\n1. The backend server is running on port 5000\n2. MongoDB is running\n3. You are connected to the internet');
+        return false;
+      }
+    }
+
+    // Check server connection on page load
+    window.addEventListener('load', async function() {
+      await checkServerConnection();
+      
+      const studentId = localStorage.getItem('studentId');
+      const studentName = localStorage.getItem('studentName');
+      
+      if (studentId && studentName) {
+        document.getElementById('displayStudentInfo').innerHTML = `
+          <i class="fas fa-user"></i> ${studentName} (${studentId})
+        `;
+        showMainApp();
+      }
+    });
+
+    function showVerification() {
+      const modal = document.getElementById('verificationModal');
+      modal.style.display = 'flex';
+      // Trigger reflow
+      modal.offsetHeight;
+      modal.classList.add('show');
+    }
+
+    function showMainApp() {
+      document.getElementById('homePage').style.display = 'none';
+      document.getElementById('verificationModal').style.display = 'none';
+      document.getElementById('mainApp').style.display = 'block';
+      
+      // Check for pending filters
+      const pendingFilter = localStorage.getItem('pendingFilter');
+      if (pendingFilter) {
+        const { category, searchTerm } = JSON.parse(pendingFilter);
+        document.getElementById('categoryFilter').value = category;
+        document.getElementById('searchFilter').value = searchTerm;
+        document.getElementById('statusFilter').value = 'lost';
+        localStorage.removeItem('pendingFilter');
+      }
+      
+      loadItems();
+    }
+
+    function signOut() {
+      localStorage.removeItem('studentId');
+      localStorage.removeItem('studentName');
+      document.getElementById('homePage').style.display = 'flex';
+      document.getElementById('mainApp').style.display = 'none';
+      document.getElementById('studentVerificationForm').reset();
+    }
+
+    document.getElementById('studentVerificationForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      const studentId = document.getElementById('studentId').value;
+      const studentName = document.getElementById('studentName').value;
+      
+      localStorage.setItem('studentId', studentId);
+      localStorage.setItem('studentName', studentName);
+      
+      document.getElementById('displayStudentInfo').innerHTML = `
+        <i class="fas fa-user"></i> ${studentName} (${studentId})
+      `;
+      
+      const modal = document.getElementById('verificationModal');
+      modal.classList.remove('show');
+      setTimeout(() => {
+        modal.style.display = 'none';
+        showMainApp();
+      }, 300);
+    });
+
+    const form = document.getElementById('itemForm');
+    const itemsContainer = document.getElementById('itemsContainer');
+
+    document.getElementById('imageFile').addEventListener('change', function(e) {
+      const file = e.target.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+          const preview = document.createElement('img');
+          preview.src = e.target.result;
+          preview.style.maxWidth = '200px';
+          preview.style.marginTop = '10px';
+          preview.className = 'image-preview';
+          
+          const existingPreview = document.querySelector('.image-preview');
+          if (existingPreview) {
+            existingPreview.remove();
+          }
+          
+          document.getElementById('imageFile').parentNode.appendChild(preview);
+        }
+        reader.readAsDataURL(file);
+      }
+    });
+
+    // Add filter event listeners
+    document.getElementById('statusFilter').addEventListener('change', loadItems);
+    document.getElementById('categoryFilter').addEventListener('change', loadItems);
+    document.getElementById('searchFilter').addEventListener('input', loadItems);
+
+    // Update form submission to check server connection first
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      
+      if (!await checkServerConnection()) return;
+      
+      const formData = new FormData(form);
+      const studentId = localStorage.getItem('studentId');
+      const studentName = localStorage.getItem('studentName');
+      
+      if (!studentId || !studentName) {
+        alert('Please sign in again to submit an item.');
+        signOut();
+        return;
+      }
+      
+      formData.append('studentId', studentId);
+      formData.append('studentName', studentName);
+      
+      try {
+        const res = await fetch(API_URL + '/items', {
+          method: 'POST',
+          body: formData
+        });
+        
+        if (!res.ok) {
+          const errorData = await res.json().catch(() => ({ error: 'Network error occurred' }));
+          throw new Error(errorData.error || 'Failed to submit item');
+        }
+        
+        const result = await res.json();
+        console.log('Item submitted successfully:', result);
+        
+        alert('Item submitted successfully!');
+        form.reset();
+        const preview = document.querySelector('.image-preview');
+        if (preview) preview.remove();
+        loadItems();
+      } catch (err) {
+        console.error('Submission error:', err);
+        alert(err.message || 'Failed to submit item. Please try again.');
+      }
+    });
+
+    // Update loadItems to check server connection first
+    async function loadItems() {
+      try {
+        if (!await checkServerConnection()) return;
+
+        const statusFilter = document.getElementById('statusFilter').value;
+        const categoryFilter = document.getElementById('categoryFilter').value;
+        const searchFilter = document.getElementById('searchFilter').value.toLowerCase();
+
+        const res = await fetch(API_URL + '/items');
+        if (!res.ok) throw new Error('Failed to fetch items');
+        
+        let items = await res.json();
+        
+        // Apply filters
+        items = items.filter(item => {
+          const matchesStatus = !statusFilter || item.status === statusFilter;
+          const matchesCategory = !categoryFilter || item.category === categoryFilter;
+          const matchesSearch = !searchFilter || 
+            item.itemName.toLowerCase().includes(searchFilter) ||
+            item.description.toLowerCase().includes(searchFilter) ||
+            item.category.toLowerCase().includes(searchFilter);
+          
+          return matchesStatus && matchesCategory && matchesSearch;
+        });
+        
+        itemsContainer.innerHTML = '';
+        items.forEach(item => {
+          const card = document.createElement('div');
+          card.className = 'item-card';
+
+          // Calculate days until expiration
+          const expiresAt = new Date(item.expiresAt);
+          const now = new Date();
+          const daysLeft = Math.ceil((expiresAt - now) / (1000 * 60 * 60 * 24));
+          
+          // Determine expiration status
+          let expirationStatus = 'active';
+          if (daysLeft <= 0) expirationStatus = 'expired';
+          else if (daysLeft <= 5) expirationStatus = 'expiring-soon';
+          
+          // Create expiration message
+          let expirationMessage = '';
+          if (expirationStatus === 'expired') {
+            expirationMessage = 'Expired';
+          } else if (expirationStatus === 'expiring-soon') {
+            expirationMessage = `Expires in ${daysLeft} day${daysLeft === 1 ? '' : 's'}`;
+          } else {
+            expirationMessage = `Active for ${daysLeft} more days`;
+          }
+
+          card.innerHTML = `
+            ${item.imageURL ? `<img src="${item.imageURL}" alt="${item.itemName}" class="item-image">` : ''}
+            <div class="item-content">
+              <div class="item-header">
+                <h3 class="item-title">${item.itemName}</h3>
+                <span class="status-badge ${item.status}">${item.status.toUpperCase()}</span>
+              </div>
+              <p class="item-details">${item.description}</p>
+              <div class="item-meta">
+                <span><i class="fas fa-tag"></i> ${item.category}</span>
+                <span><i class="fas fa-calendar"></i> ${new Date(item.dateLostOrFound).toLocaleDateString()}</span>
+              </div>
+              <div class="item-meta" style="margin-top: 10px;">
+                <span><i class="fas fa-user"></i> Posted by: ${item.studentName || 'Unknown'}</span>
+                <span><i class="fas fa-phone"></i> Contact: ${item.contactInfo}</span>
+              </div>
+              <div class="item-footer">
+                ${item.status !== 'claimed' ? `
+                  <button onclick="claimItem('${item._id}')" class="claim-button" ${expirationStatus === 'expired' ? 'disabled' : ''}>
+                    <i class="fas fa-check-circle"></i> Mark as Claimed
+                  </button>
+                ` : `
+                  <div class="claimed-badge">
+                    <i class="fas fa-check-circle"></i> Claimed
+                  </div>
+                `}
+                <div class="expiration-badge ${expirationStatus}">
+                  <i class="fas fa-clock"></i>
+                  ${expirationMessage}
+                </div>
+              </div>
+            </div>
+          `;
+          itemsContainer.appendChild(card);
+        });
+      } catch (err) {
+        console.error('Error loading items:', err);
+        itemsContainer.innerHTML = `
+          <div style="text-align: center; padding: 20px; color: #dc3545;">
+            <i class="fas fa-exclamation-circle"></i> 
+            Failed to load items. Please check your connection and try again.
+          </div>
+        `;
+      }
+    }
+
+    // Add claim functionality
+    async function claimItem(itemId) {
+      try {
+        const res = await fetch(`${API_URL}/items/${itemId}`, {
+          method: 'PATCH',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ status: 'claimed' })
+        });
+
+        if (!res.ok) {
+          throw new Error('Failed to update item');
+        }
+
+        loadItems();
+      } catch (err) {
+        console.error('Error claiming item:', err);
+        alert('Failed to mark item as claimed');
+      }
+    }
+
+    // Add the quickFilter function
+    function quickFilter(category, searchTerm) {
+      // First verify the user
+      const studentId = localStorage.getItem('studentId');
+      const studentName = localStorage.getItem('studentName');
+      
+      if (!studentId || !studentName) {
+        showVerification();
+        // Store the filter to apply after verification
+        localStorage.setItem('pendingFilter', JSON.stringify({ category, searchTerm }));
+        return;
+      }
+      
+      // Show main app and apply filters
+      showMainApp();
+      
+      // Set the category filter
+      document.getElementById('categoryFilter').value = category;
+      
+      // Set the search filter
+      document.getElementById('searchFilter').value = searchTerm;
+      
+      // Set status to "lost" since these are quick filters for lost items
+      document.getElementById('statusFilter').value = 'lost';
+      
+      // Load filtered items
+      loadItems();
+    }
+
+    // Initial load
+    loadItems();
+  </script>
+</body>
+</html>
