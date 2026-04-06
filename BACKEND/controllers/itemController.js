@@ -42,11 +42,17 @@ export const postItem = async (req, res) => {
     };
 
     if (req.file) {
-      // Dynamic URL - works for both local and deployed environments
-      const baseURL = process.env.NODE_ENV === 'production' 
-        ? `${req.protocol}://${req.get('host')}`
-        : 'http://localhost:5000';
-      itemData.imageURL = `${baseURL}/uploads/${req.file.filename}`;
+      // Use the current request's host to build the image URL
+      // This works for localhost, Render, or any other deployment
+      const protocol = req.get('x-forwarded-proto') || req.protocol;
+      const host = req.get('host');
+      itemData.imageURL = `${protocol}://${host}/uploads/${req.file.filename}`;
+      
+      console.log('Image uploaded:', {
+        filename: req.file.filename,
+        path: req.file.path,
+        imageURL: itemData.imageURL
+      });
     }
 
     const newItem = new Item(itemData);

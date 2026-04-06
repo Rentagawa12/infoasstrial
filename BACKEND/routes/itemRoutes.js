@@ -2,6 +2,7 @@ import express from 'express';
 import multer from 'multer';
 import path from 'path';
 import fs from 'fs';
+import { fileURLToPath } from 'url';
 import Item from '../models/itemModel.js';
 import {
   getItems,
@@ -14,12 +15,17 @@ import { validateItem } from '../middleware/eventLogger.js';
 
 const router = express.Router();
 
+// __dirname setup for ES modules
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
 // Configure multer for file uploads
 const storage = multer.diskStorage({
     destination: function(req, file, cb) {
-        const uploadDir = 'uploads/';
+        // Use absolute path to BACKEND/uploads
+        const uploadDir = path.join(__dirname, '../uploads');
         if (!fs.existsSync(uploadDir)) {
-            fs.mkdirSync(uploadDir);
+            fs.mkdirSync(uploadDir, { recursive: true });
         }
         cb(null, uploadDir);
     },
