@@ -1575,9 +1575,9 @@
           const matchesStatus = !statusFilter || item.status === statusFilter;
           const matchesCategory = !categoryFilter || item.category === categoryFilter;
           const matchesSearch = !searchFilter || 
-            item.itemName.toLowerCase().includes(searchFilter) ||
-            item.description.toLowerCase().includes(searchFilter) ||
-            item.category.toLowerCase().includes(searchFilter);
+            (item.itemName && item.itemName.toLowerCase().includes(searchFilter)) ||
+            (item.description && item.description.toLowerCase().includes(searchFilter)) ||
+            (item.category && item.category.toLowerCase().includes(searchFilter));
           
           return matchesStatus && matchesCategory && matchesSearch;
         });
@@ -1611,17 +1611,17 @@
             ${item.imageURL ? `<img src="${item.imageURL}" alt="${item.itemName}" class="item-image">` : ''}
             <div class="item-content">
               <div class="item-header">
-                <h3 class="item-title">${item.itemName}</h3>
-                <span class="status-badge ${item.status}">${item.status.toUpperCase()}</span>
+                <h3 class="item-title">${item.itemName || 'Unnamed Item'}</h3>
+                <span class="status-badge ${item.status || 'unknown'}">${(item.status || 'unknown').toUpperCase()}</span>
               </div>
-              <p class="item-details">${item.description}</p>
+              <p class="item-details">${item.description || 'No description'}</p>
               <div class="item-meta">
-                <span><i class="fas fa-tag"></i> ${item.category}</span>
+                <span><i class="fas fa-tag"></i> ${item.category || 'Uncategorized'}</span>
                 <span><i class="fas fa-calendar"></i> ${new Date(item.dateLostOrFound).toLocaleDateString()}</span>
               </div>
               <div class="item-meta" style="margin-top: 10px;">
                 <span><i class="fas fa-user"></i> Posted by: ${item.studentName || 'Unknown'}</span>
-                <span><i class="fas fa-phone"></i> Contact: ${item.contactInfo}</span>
+                <span><i class="fas fa-phone"></i> Contact: ${item.contactInfo || 'N/A'}</span>
               </div>
               <div class="item-footer">
                 ${item.status !== 'claimed' ? `

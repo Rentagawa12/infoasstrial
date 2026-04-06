@@ -247,12 +247,13 @@ export const securityHeaders = (req, res, next) => {
   // - External fonts from Google Fonts
   // - External stylesheets from CDNs (Font Awesome, etc.)
   // - Inline styles and scripts (needed for single-file HTML app)
+  // - External images from tip.edu.ph (background image)
   res.setHeader('Content-Security-Policy', 
     "default-src 'self'; " +
     "script-src 'self' 'unsafe-inline'; " +
     "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com; " +
     "font-src 'self' https://fonts.gstatic.com https://cdnjs.cloudflare.com; " +
-    "img-src 'self' data: blob:; " +
+    "img-src 'self' data: blob: https://www.tip.edu.ph; " +
     "connect-src 'self'"
   );
   
