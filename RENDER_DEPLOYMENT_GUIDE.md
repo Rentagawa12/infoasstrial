@@ -77,16 +77,22 @@ curl https://lost-and-found-tip.onrender.com/health
 
 ### **Method 2: Deploy via render.yaml (Infrastructure as Code)**
 
-#### Step 1: Update render.yaml
-Already configured in `Dockerfiles/render.yaml`!
+**Note**: `render.yaml` is now in the root directory.
+
+#### Step 1: Verify render.yaml
+The file `render.yaml` is already configured in the root directory.
 
 #### Step 2: Deploy from Dashboard
 1. Go to Render Dashboard
 2. Click **"New +"** → **"Blueprint"**
 3. Connect repository: `Rentagawa12/infoasstrial`
-4. Select `Dockerfiles/render.yaml`
-5. Add environment variables (same as Method 1)
+4. Render will auto-detect `render.yaml` in the root
+5. Add environment variable **values** for:
+   - `MONGO_URI`: `mongodb+srv://miguel:miguelito12@lostandfound.tpd9hq2.mongodb.net/?appName=lostandfound`
+   - `JWT_SECRET`: `96799a650722b9ee24f4299c28fac7b429e178d9509d524e4ff5e71a1796b21f`
 6. Click **"Apply"**
+
+**Note**: You still need to provide the actual values for `MONGO_URI` and `JWT_SECRET` in the dashboard since `sync: false` means they're not stored in the file.
 
 ---
 
