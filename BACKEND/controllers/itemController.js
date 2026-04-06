@@ -42,7 +42,11 @@ export const postItem = async (req, res) => {
     };
 
     if (req.file) {
-      itemData.imageURL = `https://infoassproj.onrender.com/uploads/${req.file.filename}`;
+      // Dynamic URL - works for both local and deployed environments
+      const baseURL = process.env.NODE_ENV === 'production' 
+        ? `${req.protocol}://${req.get('host')}`
+        : 'http://localhost:5000';
+      itemData.imageURL = `${baseURL}/uploads/${req.file.filename}`;
     }
 
     const newItem = new Item(itemData);
