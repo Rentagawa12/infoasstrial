@@ -39,7 +39,7 @@ Click **"Add Environment Variable"** and add these:
 | Key | Value | Notes |
 |-----|-------|-------|
 | `NODE_ENV` | `production` | Production mode |
-| `MONGO_URI` | `mongodb+srv://miguel:miguelito12@lostandfound.tpd9hq2.mongodb.net/?appName=lostandfound` | Your MongoDB Atlas connection |
+| `MONGO_URI` | `mongodb+srv://miguel:<db:password>@lostandfound.tpd9hq2.mongodb.net/?appName=lostandfound` | Your MongoDB Atlas connection |
 | `JWT_SECRET` | `96799a650722b9ee24f4299c28fac7b429e178d9509d524e4ff5e71a1796b21f` | Your JWT secret key |
 | `PORT` | `10000` | Render uses port 10000 |
 
