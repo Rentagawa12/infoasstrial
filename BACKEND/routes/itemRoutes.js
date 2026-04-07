@@ -79,11 +79,11 @@ const upload = multer({
 // PUBLIC: GET all items (with optional ?status= and ?q= filters)
 router.get('/', getItems);
 
-// PROTECTED: POST new item — requires authentication
-router.post('/', auth, upload.single('image'), validateItem, postItem);
+// PUBLIC: POST new item
+router.post('/', upload.single('image'), validateItem, postItem);
 
-// PROTECTED: PATCH status — requires authentication
-router.patch('/:id', auth, updateItemStatus);
+// PUBLIC: PATCH status
+router.patch('/:id', updateItemStatus);
 
 // PROTECTED: DELETE item — admin only (RBAC enforcement)
 router.delete('/:id', auth, adminOnly, deleteItem);
