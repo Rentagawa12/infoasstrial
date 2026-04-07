@@ -53,13 +53,11 @@ const upload = multer({
 // PUBLIC: GET all items (with optional ?status= and ?q= filters)
 router.get('/', getItems);
 
-// PUBLIC: POST new item — student verification via form data
-// Note: For academic demo - in production this should require JWT auth
-router.post('/', upload.single('image'), validateItem, postItem);
+// PROTECTED: POST new item — requires authentication
+router.post('/', auth, upload.single('image'), validateItem, postItem);
 
-// PUBLIC: PATCH status — allow anyone to claim items
-// Note: For academic demo - in production this should require JWT auth
-router.patch('/:id', updateItemStatus);
+// PROTECTED: PATCH status — requires authentication
+router.patch('/:id', auth, updateItemStatus);
 
 // PROTECTED: DELETE item — admin only (RBAC enforcement)
 router.delete('/:id', auth, adminOnly, deleteItem);

@@ -11,23 +11,26 @@ const blockedIPs = new Set();
 
 /**
  * Rate limiter configuration
+ * In test mode, use much higher limits to avoid false positives
  */
+const isTest = process.env.NODE_ENV === 'test';
+
 const RATE_LIMITS = {
   public: {
     windowMs: 15 * 60 * 1000, // 15 minutes
-    max: 100 // 100 requests per window
+    max: isTest ? 10000 : 100 // 100 requests per window in production
   },
   authenticated: {
     windowMs: 15 * 60 * 1000,
-    max: 500 // 500 requests per window
+    max: isTest ? 10000 : 500 // 500 requests per window in production
   },
   auth: {
     windowMs: 15 * 60 * 1000,
-    max: 10 // 10 login/register attempts per window
+    max: isTest ? 1000 : 10 // 10 login/register attempts per window in production
   },
   strict: {
     windowMs: 15 * 60 * 1000,
-    max: 30 // For sensitive operations
+    max: isTest ? 1000 : 30 // For sensitive operations in production
   }
 };
 

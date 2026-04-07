@@ -68,7 +68,7 @@ app.use('/api/notifications', rateLimit('authenticated'), notificationRoutes);
 app.use('/api/keys', rateLimit('authenticated'), apiKeyRoutes);
 
 // ── Health / Monitoring endpoint ──────────────────────────────────────────────
-app.get('/health', (req, res) => {
+app.get('/health', rateLimit('public'), (req, res) => {
     res.json({
         status: 'ok',
         mongodb: mongoose.connection.readyState === 1 ? 'connected' : 'disconnected',
@@ -109,10 +109,14 @@ mongoose.connect(MONGO_URI, {
     // Initialize API orchestration layer
     initializeOrchestration();
     
-    app.listen(PORT, () => {
-        console.log('Server running on port ' + PORT);
-        console.log('Server URL: http://localhost:' + PORT);
-    });
+    // Only start listening if not in test mode
+    // Tests import the app but don't need it to listen on a port
+    if (process.env.NODE_ENV !== 'test') {
+        app.listen(PORT, () => {
+            console.log('Server running on port ' + PORT);
+            console.log('Server URL: http://localhost:' + PORT);
+        });
+    }
 })
 .catch((err) => {
     console.error('MongoDB connection error:', err.message);
