@@ -13,6 +13,12 @@ services:
         sync: false
       - key: PORT
         value: 10000
+      - key: CLOUDINARY_CLOUD_NAME
+        sync: false
+      - key: CLOUDINARY_API_KEY
+        sync: false
+      - key: CLOUDINARY_API_SECRET
+        sync: false
     # NOTE: Persistent disk disabled - not available on free tier
     # File uploads will be stored in ephemeral storage (lost on restart)
     # For production, upgrade to paid plan or use cloud storage (AWS S3, Cloudinary)

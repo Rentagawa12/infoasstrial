@@ -42,16 +42,23 @@ export const postItem = async (req, res) => {
     };
 
     if (req.file) {
-      // Use the current request's host to build the image URL
-      // This works for localhost, Render, or any other deployment
-      const protocol = req.get('x-forwarded-proto') || req.protocol;
-      const host = req.get('host');
-      itemData.imageURL = `${protocol}://${host}/uploads/${req.file.filename}`;
+      // If using Cloudinary, req.file.path contains the full Cloudinary URL
+      // If using local storage, build the URL from the request host
+      if (req.file.path && req.file.path.includes('cloudinary.com')) {
+        // Cloudinary URL (already a full URL)
+        itemData.imageURL = req.file.path;
+      } else {
+        // Local storage - build URL dynamically
+        const protocol = req.get('x-forwarded-proto') || req.protocol;
+        const host = req.get('host');
+        itemData.imageURL = `${protocol}://${host}/uploads/${req.file.filename}`;
+      }
       
       console.log('Image uploaded:', {
         filename: req.file.filename,
         path: req.file.path,
-        imageURL: itemData.imageURL
+        imageURL: itemData.imageURL,
+        storage: req.file.path && req.file.path.includes('cloudinary.com') ? 'Cloudinary' : 'Local'
       });
     }
 
