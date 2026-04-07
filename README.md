@@ -311,10 +311,7 @@ MongoDB Atlas
 
 This is an academic project for Information Assurance and Security course.
 
-**Team Members**:
-- [Add your names here]
 
----
 
 ## 📄 License
 
@@ -328,25 +325,6 @@ For issues or questions:
 - Check the documentation in session files
 - Review API documentation (Postman collection)
 - Check deployment guides
-
----
-
-## 🎓 Academic Context
-
-**Course**: Information Assurance and Security  
-**Institution**: Technological Institute of the Philippines (TIP)  
-**Project Type**: System Integration with APIs, Middleware, and DevOps
-
-**Learning Outcomes Demonstrated**:
-- ✅ System integration design
-- ✅ RESTful API implementation
-- ✅ Authentication and authorization
-- ✅ Event-driven middleware
-- ✅ Database design and optimization
-- ✅ Security implementation (RBAC, validation, rate limiting)
-- ✅ DevOps practices (CI/CD, containerization, deployment)
-- ✅ Comprehensive testing
-- ✅ Technical documentation
 
 ---
 
