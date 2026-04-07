@@ -1,0 +1,946 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Documentation - Lost & Found @ TIP Manila</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/atom-one-dark.min.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+<style>
+  :root {
+    --primary: #ffc20e;
+    --accent: #f37021;
+    --black: #1a1a1a;
+    --dark-gray: #2d2d2d;
+    --text: #4a4a4a;
+    --text-light: #6e6e6e;
+    --white: #ffffff;
+    --light-gray: #f8f9fa;
+    --border: #e1e1e1;
+    --success: #28a745;
+    --info: #17a2b8;
+    --shadow-md: 0 4px 8px rgba(0,0,0,0.1);
+    --shadow-lg: 0 8px 16px rgba(0,0,0,0.1);
+    --radius-md: 12px;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: 'Poppins', sans-serif; background: var(--light-gray); color: var(--text); line-height: 1.6; }
+
+  /* Header */
+  header {
+    background: linear-gradient(135deg, var(--black), var(--dark-gray));
+    color: var(--white);
+    padding: 3rem 2rem;
+    text-align: center;
+    box-shadow: var(--shadow-lg);
+  }
+
+  header h1 { font-size: 2.5rem; margin-bottom: 0.5rem; }
+  header p { font-size: 1.1rem; opacity: 0.9; }
+
+  /* Navigation */
+  nav {
+    background: var(--white);
+    box-shadow: var(--shadow-md);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+
+  nav ul {
+    list-style: none;
+    display: flex;
+    max-width: 1200px;
+    margin: 0 auto;
+    overflow-x: auto;
+  }
+
+  nav li {
+    flex: 1;
+    min-width: 150px;
+  }
+
+  nav a {
+    display: block;
+    padding: 1.2rem;
+    text-decoration: none;
+    color: var(--text);
+    font-weight: 600;
+    text-align: center;
+    border-bottom: 3px solid transparent;
+    transition: all 0.3s ease;
+  }
+
+  nav a:hover {
+    background: var(--light-gray);
+    border-bottom-color: var(--primary);
+    color: var(--primary);
+  }
+
+  /* Main Content */
+  .container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 2rem;
+  }
+
+  .section {
+    background: var(--white);
+    padding: 2.5rem;
+    margin-bottom: 2rem;
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-md);
+    display: none;
+  }
+
+  .section.active {
+    display: block;
+  }
+
+  h2 {
+    color: var(--primary);
+    font-size: 2rem;
+    margin-bottom: 1rem;
+    border-bottom: 3px solid var(--primary);
+    padding-bottom: 1rem;
+  }
+
+  h3 {
+    color: var(--accent);
+    font-size: 1.3rem;
+    margin: 1.5rem 0 1rem;
+  }
+
+  /* API Documentation */
+  .api-endpoint {
+    background: var(--light-gray);
+    border-left: 4px solid var(--primary);
+    padding: 1.5rem;
+    margin: 1.5rem 0;
+    border-radius: var(--radius-md);
+  }
+
+  .method {
+    display: inline-block;
+    padding: 0.4rem 0.8rem;
+    border-radius: 4px;
+    font-weight: 700;
+    margin-right: 1rem;
+    font-size: 0.9rem;
+  }
+
+  .method.get { background: #4a90e2; color: white; }
+  .method.post { background: #50c878; color: white; }
+  .method.patch { background: #ffa500; color: white; }
+  .method.delete { background: #e74c3c; color: white; }
+
+  .endpoint-path {
+    font-family: 'Courier New', monospace;
+    background: var(--black);
+    color: var(--primary);
+    padding: 0.8rem;
+    border-radius: 4px;
+    margin: 1rem 0;
+    overflow-x: auto;
+  }
+
+  /* Code Blocks */
+  pre {
+    background: var(--black);
+    color: var(--white);
+    padding: 1.5rem;
+    border-radius: var(--radius-md);
+    overflow-x: auto;
+    margin: 1rem 0;
+  }
+
+  code {
+    font-family: 'Courier New', monospace;
+    font-size: 0.9rem;
+  }
+
+  /* Tables */
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 1.5rem 0;
+  }
+
+  th {
+    background: var(--primary);
+    color: var(--black);
+    padding: 1rem;
+    text-align: left;
+    font-weight: 700;
+  }
+
+  td {
+    padding: 0.9rem 1rem;
+    border-bottom: 1px solid var(--border);
+  }
+
+  tr:hover { background: var(--light-gray); }
+
+  /* Features Grid */
+  .features-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 2rem;
+    margin: 2rem 0;
+  }
+
+  .feature-card {
+    background: var(--light-gray);
+    padding: 1.5rem;
+    border-radius: var(--radius-md);
+    border-left: 4px solid var(--accent);
+    text-align: center;
+  }
+
+  .feature-card i {
+    font-size: 2.5rem;
+    color: var(--primary);
+    margin-bottom: 1rem;
+  }
+
+  .feature-card h4 {
+    color: var(--black);
+    margin-bottom: 0.5rem;
+  }
+
+  /* Response Examples */
+  .response-box {
+    background: #2b2b2b;
+    border-left: 4px solid var(--success);
+    padding: 1.5rem;
+    margin: 1.5rem 0;
+    border-radius: var(--radius-md);
+  }
+
+  .response-label {
+    color: var(--success);
+    font-weight: 700;
+    margin-bottom: 0.8rem;
+    font-size: 0.9rem;
+  }
+
+  /* Badges */
+  .badge {
+    display: inline-block;
+    padding: 0.4rem 0.8rem;
+    border-radius: 4px;
+    font-size: 0.85rem;
+    font-weight: 600;
+  }
+
+  .badge.required { background: #ffe5e5; color: #dc3545; }
+  .badge.optional { background: #e5f5ff; color: #17a2b8; }
+  .badge.auth { background: #fff3cd; color: #856404; }
+
+  /* Footer */
+  footer {
+    background: var(--black);
+    color: var(--white);
+    text-align: center;
+    padding: 2rem;
+    margin-top: 3rem;
+  }
+
+  .back-to-top {
+    position: fixed;
+    bottom: 2rem;
+    right: 2rem;
+    background: var(--primary);
+    color: var(--black);
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    box-shadow: var(--shadow-lg);
+    transition: all 0.3s ease;
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  .back-to-top.show {
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  .back-to-top:hover {
+    transform: translateY(-5px);
+  }
+
+  @media (max-width: 768px) {
+    header h1 { font-size: 1.8rem; }
+    nav ul { flex-direction: column; }
+    nav li { min-width: auto; }
+    .container { padding: 1rem; }
+    .section { padding: 1.5rem; }
+  }
+</style>
+</head>
+<body>
+  <!-- Header -->
+  <header>
+    <h1>📚 Lost & Found @ TIP Manila</h1>
+    <p>Complete Documentation & API Reference</p>
+  </header>
+
+  <!-- Navigation -->
+  <nav>
+    <ul>
+      <li><a href="#" onclick="switchSection('overview')">Overview</a></li>
+      <li><a href="#" onclick="switchSection('features')">Features</a></li>
+      <li><a href="#" onclick="switchSection('api')">API Reference</a></li>
+      <li><a href="#" onclick="switchSection('integration')">Integration</a></li>
+      <li><a href="#" onclick="switchSection('security')">Security</a></li>
+      <li><a href="#" onclick="switchSection('deployment')">Deployment</a></li>
+      <li><a href="#" onclick="switchSection('faq')">FAQ</a></li>
+    </ul>
+  </nav>
+
+  <div class="container">
+    <!-- Overview Section -->
+    <div class="section active" id="overview">
+      <h2>🎯 Project Overview</h2>
+      <p>Lost & Found @ TIP Manila is a comprehensive system designed to help TIP Manila students report and locate lost items within the campus community. The system integrates multiple modules including authentication, item management, notifications, analytics, and API key management.</p>
+
+      <h3>System Architecture</h3>
+      <pre><code>┌─────────────────────────────────────────────────────────────┐
+│                    Lost & Found System                        │
+├─────────────────────────────────────────────────────────────┤
+│  Frontend (HTML/CSS/JS)                                       │
+│  ├── Home Page                                                │
+│  ├── Student Verification                                     │
+│  ├── Dashboard (Report & Browse)                              │
+│  ├── Admin Dashboard                                          │
+│  └── Documentation                                            │
+├─────────────────────────────────────────────────────────────┤
+│  Backend (Node.js/Express)                                    │
+│  ├── Auth Module (JWT)                                        │
+│  ├── Item Management Module                                   │
+│  ├── Notification Module                                      │
+│  ├── Analytics Module                                         │
+│  ├── API Key Management                                       │
+│  └── Middleware (Security, Logging, Rate Limiting)            │
+├─────────────────────────────────────────────────────────────┤
+│  Database (MongoDB)                                           │
+│  ├── Users Collection                                         │
+│  ├── Items Collection                                         │
+│  ├── Notifications Collection                                 │
+│  ├── Analytics Events                                         │
+│  └── API Keys                                                 │
+└─────────────────────────────────────────────────────────────┘</code></pre>
+
+      <h3>Technology Stack</h3>
+      <table>
+        <tr>
+          <th>Layer</th>
+          <th>Technology</th>
+          <th>Version</th>
+        </tr>
+        <tr>
+          <td><strong>Frontend</strong></td>
+          <td>HTML5, CSS3, Vanilla JavaScript</td>
+          <td>ES6+</td>
+        </tr>
+        <tr>
+          <td><strong>Backend</strong></td>
+          <td>Node.js, Express.js</td>
+          <td>v18</td>
+        </tr>
+        <tr>
+          <td><strong>Database</strong></td>
+          <td>MongoDB</td>
+          <td>v6+</td>
+        </tr>
+        <tr>
+          <td><strong>Authentication</strong></td>
+          <td>JWT (JSON Web Tokens)</td>
+          <td>RS256</td>
+        </tr>
+        <tr>
+          <td><strong>File Storage</strong></td>
+          <td>Cloudinary / Local Storage</td>
+          <td>--</td>
+        </tr>
+        <tr>
+          <td><strong>Deployment</strong></td>
+          <td>Docker, GitHub Actions, Render</td>
+          <td>v20+</td>
+        </tr>
+      </table>
+    </div>
+
+    <!-- Features Section -->
+    <div class="section" id="features">
+      <h2>✨ Key Features</h2>
+
+      <div class="features-grid">
+        <div class="feature-card">
+          <i class="fas fa-search"></i>
+          <h4>Smart Search</h4>
+          <p>Search lost & found items by category, status, or keywords</p>
+        </div>
+        <div class="feature-card">
+          <i class="fas fa-image"></i>
+          <h4>Image Upload</h4>
+          <p>Submit items with photos on Cloudinary or local storage</p>
+        </div>
+        <div class="feature-card">
+          <i class="fas fa-bell"></i>
+          <h4>Smart Notifications</h4>
+          <p>Get alerts for matching items and status updates</p>
+        </div>
+        <div class="feature-card">
+          <i class="fas fa-lock"></i>
+          <h4>Secure Auth</h4>
+          <p>JWT-based authentication with role-based access control</p>
+        </div>
+        <div class="feature-card">
+          <i class="fas fa-chart-bar"></i>
+          <h4>Analytics</h4>
+          <p>Dashboard with detailed statistics and insights</p>
+        </div>
+        <div class="feature-card">
+          <i class="fas fa-shield-alt"></i>
+          <h4>Security</h4>
+          <p>Rate limiting, XSS protection, input validation</p>
+        </div>
+      </div>
+
+      <h3>Item Management</h3>
+      <p>Users can report lost or found items with detailed information including:</p>
+      <ul style="margin-left: 1.5rem; margin-top: 1rem;">
+        <li>Item name and description</li>
+        <li>Category (Electronics, Accessories, Documents, Clothing, Books, Others)</li>
+        <li>Date lost or found</li>
+        <li>Contact information</li>
+        <li>Item photos</li>
+        <li>Status tracking (Lost → Found → Claimed)</li>
+      </ul>
+
+      <h3>Auto-Expiration</h3>
+      <p>Items automatically expire after <strong>30 days</strong> and are removed from the system to keep the database clean.</p>
+
+      <h3>Role-Based Access Control</h3>
+      <table>
+        <tr>
+          <th>Role</th>
+          <th>Permissions</th>
+        </tr>
+        <tr>
+          <td><strong>User</strong></td>
+          <td>Post items, view items, claim items, manage own items</td>
+        </tr>
+        <tr>
+          <td><strong>Moderator</strong></td>
+          <td>User permissions + review items, approve posts</td>
+        </tr>
+        <tr>
+          <td><strong>Admin</strong></td>
+          <td>Delete items, manage users, view analytics, system logs</td>
+        </tr>
+      </table>
+    </div>
+
+    <!-- API Reference Section -->
+    <div class="section" id="api">
+      <h2>🔌 API Reference</h2>
+      <p>Base URL: <code>https://api.lostandfound.tip.edu.ph/api</code> or <code>http://localhost:5000/api</code></p>
+
+      <h3>Authentication Endpoints</h3>
+
+      <div class="api-endpoint">
+        <span class="method post">POST</span>
+        <strong>/auth/register</strong>
+        <p style="margin-top: 0.5rem;">Register a new user</p>
+        <strong>Request Body:</strong>
+        <pre><code>{
+  "username": "student123",
+  "email": "student@tip.edu.ph",
+  "password": "securePassword123"
+}</code></pre>
+        <strong>Response (201):</strong>
+        <div class="response-box">
+          <div class="response-label">200 OK</div>
+          <pre><code>{
+  "message": "User registered successfully",
+  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
+  "user": {
+    "id": "507f1f77bcf86cd799439011",
+    "username": "student123",
+    "email": "student@tip.edu.ph",
+    "role": "user"
+  }
+}</code></pre>
+        </div>
+      </div>
+
+      <div class="api-endpoint">
+        <span class="method post">POST</span>
+        <strong>/auth/login</strong>
+        <p style="margin-top: 0.5rem;">Login user and get JWT token</p>
+        <strong>Request Body:</strong>
+        <pre><code>{
+  "email": "student@tip.edu.ph",
+  "password": "securePassword123"
+}</code></pre>
+      </div>
+
+      <h3>Item Endpoints</h3>
+
+      <div class="api-endpoint">
+        <span class="method get">GET</span>
+        <strong>/items</strong>
+        <p style="margin-top: 0.5rem;">Get all items with optional filters</p>
+        <strong>Query Parameters:</strong>
+        <table>
+          <tr>
+            <th>Parameter</th>
+            <th>Type</th>
+            <th>Description</th>
+          </tr>
+          <tr>
+            <td>status</td>
+            <td>string</td>
+            <td>Filter by status: lost, found, claimed</td>
+          </tr>
+          <tr>
+            <td>q</td>
+            <td>string</td>
+            <td>Search query (item name, description)</td>
+          </tr>
+        </table>
+        <strong>Example:</strong>
+        <div class="endpoint-path">GET /items?status=lost&q=phone</div>
+      </div>
+
+      <div class="api-endpoint">
+        <span class="method post">POST</span>
+        <strong>/items</strong> <span class="badge auth">Requires Auth</span>
+        <p style="margin-top: 0.5rem; margin-right: 0.5rem;">Create a new item report (multipart form)</p>
+        <strong>Form Data:</strong>
+        <table>
+          <tr>
+            <th>Field</th>
+            <th>Type</th>
+            <th style="width: 100px;">Required</th>
+          </tr>
+          <tr>
+            <td>itemName</td>
+            <td>string</td>
+            <td><span class="badge required">Yes</span></td>
+          </tr>
+          <tr>
+            <td>description</td>
+            <td>string</td>
+            <td><span class="badge required">Yes</span></td>
+          </tr>
+          <tr>
+            <td>category</td>
+            <td>enum</td>
+            <td><span class="badge required">Yes</span></td>
+          </tr>
+          <tr>
+            <td>status</td>
+            <td>enum</td>
+            <td><span class="badge required">Yes</span></td>
+          </tr>
+          <tr>
+            <td>dateLostOrFound</td>
+            <td>date</td>
+            <td><span class="badge required">Yes</span></td>
+          </tr>
+          <tr>
+            <td>contactInfo</td>
+            <td>string</td>
+            <td><span class="badge required">Yes</span></td>
+          </tr>
+          <tr>
+            <td>image</td>
+            <td>file</td>
+            <td><span class="badge optional">No</span></td>
+          </tr>
+        </table>
+      </div>
+
+      <div class="api-endpoint">
+        <span class="method patch">PATCH</span>
+        <strong>/items/:id</strong> <span class="badge auth">Requires Auth</span>
+        <p style="margin-top: 0.5rem;">Update item status (claim item)</p>
+        <strong>Request Body:</strong>
+        <pre><code>{
+  "status": "claimed"
+}</code></pre>
+      </div>
+
+      <h3>Notifications Endpoints</h3>
+
+      <div class="api-endpoint">
+        <span class="method get">GET</span>
+        <strong>/notifications</strong> <span class="badge auth">Requires Auth</span>
+        <p style="margin-top: 0.5rem;">Get user's notifications</p>
+      </div>
+
+      <div class="api-endpoint">
+        <span class="method patch">PATCH</span>
+        <strong>/notifications/:id/read</strong> <span class="badge auth">Requires Auth</span>
+        <p style="margin-top: 0.5rem;">Mark notification as read</p>
+      </div>
+
+      <h3>Analytics Endpoints</h3>
+
+      <div class="api-endpoint">
+        <span class="method get">GET</span>
+        <strong>/analytics/dashboard</strong> <span class="badge auth">Requires Auth (Admin)</span>
+        <p style="margin-top: 0.5rem;">Get admin dashboard statistics</p>
+      </div>
+
+      <div class="api-endpoint">
+        <span class="method get">GET</span>
+        <strong>/analytics/category-distribution</strong>
+        <p style="margin-top: 0.5rem;">Get items distributed by category (public)</p>
+      </div>
+
+      <h3>Health Check</h3>
+
+      <div class="api-endpoint">
+        <span class="method get">GET</span>
+        <strong>/health</strong>
+        <p style="margin-top: 0.5rem;">Check server and database status</p>
+        <strong>Response:</strong>
+        <div class="response-box">
+          <div class="response-label">200 OK</div>
+          <pre><code>{
+  "status": "ok",
+  "mongodb": "connected",
+  "uptime": 3456.789,
+  "memoryMB": "45.32",
+  "timestamp": "2024-04-07T10:30:00.000Z"
+}</code></pre>
+        </div>
+      </div>
+    </div>
+
+    <!-- Integration Section -->
+    <div class="section" id="integration">
+      <h2>🔗 System Integration</h2>
+
+      <h3>Module Interactions</h3>
+      <p>The system uses an <strong>event-driven architecture</strong> with message queue simulation for cross-module communication:</p>
+
+      <pre><code>ITEM CREATED EVENT
+└─> Item Module
+    ├─> Notification Module (Check for matches, send alerts)
+    ├─> Analytics Module (Log item_posted event)
+    └─> Orchestration Layer (Broadcast to all handlers)
+
+ITEM CLAIMED EVENT
+└─> Item Module
+    ├─> Notification Module (Notify item owner)
+    ├─> Analytics Module (Log item_claimed event)
+    └─> Orchestration Layer
+
+USER REGISTERED EVENT
+└─> Auth Module
+    ├─> Notification Module (Send welcome message)
+    ├─> Analytics Module (Log user_registered event)
+    └─> Orchestration Layer</code></pre>
+
+      <h3>Event Bus System</h3>
+      <p>The orchestration middleware manages inter-module communication:</p>
+      <ul style="margin-left: 1.5rem; margin-top: 1rem;">
+        <li><strong>item:created</strong> - Emitted when new item is posted</li>
+        <li><strong>item:claimed</strong> - Emitted when item is marked as claimed</li>
+        <li><strong>item:expiring</strong> - Emitted 24hrs before item expiration</li>
+        <li><strong>user:registered</strong> - Emitted on user signup</li>
+        <li><strong>user:login</strong> - Emitted on user login</li>
+        <li><strong>security:alert</strong> - Emitted on security events</li>
+      </ul>
+
+      <h3>Database Relationships</h3>
+      <p>Collections are related via ObjectId foreign keys with application-level integrity:</p>
+      <ul style="margin-left: 1.5rem; margin-top: 1rem;">
+        <li><strong>Users → Items</strong> (1:N) - One user can post multiple items</li>
+        <li><strong>Users → Notifications</strong> (1:N) - One user receives many notifications</li>
+        <li><strong>Items → Notifications</strong> (1:N) - One item can trigger multiple notifications</li>
+        <li><strong>Users → Analytics Events</strong> (1:N) - One user generates many events</li>
+        <li><strong>Users → API Keys</strong> (1:N) - One user can have multiple API keys</li>
+      </ul>
+    </div>
+
+    <!-- Security Section -->
+    <div class="section" id="security">
+      <h2>🔒 Security Implementation</h2>
+
+      <h3>Authentication (JWT)</h3>
+      <ul style="margin-left: 1.5rem; margin-top: 1rem;">
+        <li>JWT tokens expire after <strong>24 hours</strong></li>
+        <li>Passwords hashed with <strong>bcryptjs</strong> (salt rounds: 10)</li>
+        <li>Token stored in Authorization header: <code>Bearer {token}</code></li>
+        <li>JWT payload includes userId and role</li>
+      </ul>
+
+      <h3>Authorization (RBAC)</h3>
+      <p>Role-Based Access Control with three roles:</p>
+      <table>
+        <tr>
+          <th>Role</th>
+          <th>Can Read</th>
+          <th>Can Write</th>
+          <th>Can Delete</th>
+          <th>Can Admin</th>
+        </tr>
+        <tr>
+          <td>User</td>
+          <td>✅ Own items</td>
+          <td>✅ Own items</td>
+          <td>❌</td>
+          <td>❌</td>
+        </tr>
+        <tr>
+          <td>Moderator</td>
+          <td>✅ All items</td>
+          <td>✅ All items</td>
+          <td>✅ Review</td>
+          <td>❌</td>
+        </tr>
+        <tr>
+          <td>Admin</td>
+          <td>✅ All</td>
+          <td>✅ All</td>
+          <td>✅ All</td>
+          <td>✅ Yes</td>
+        </tr>
+      </table>
+
+      <h3>Rate Limiting</h3>
+      <table>
+        <tr>
+          <th>Endpoint Type</th>
+          <th>Limit</th>
+          <th>Window</th>
+        </tr>
+        <tr>
+          <td>Public Endpoints</td>
+          <td>100 requests</td>
+          <td>15 minutes</td>
+        </tr>
+        <tr>
+          <td>Auth Endpoints</td>
+          <td>10 attempts</td>
+          <td>15 minutes</td>
+        </tr>
+        <tr>
+          <td>Authenticated Endpoints</td>
+          <td>500 requests</td>
+          <td>15 minutes</td>
+        </tr>
+      </table>
+
+      <h3>Input Validation & Sanitization</h3>
+      <ul style="margin-left: 1.5rem; margin-top: 1rem;">
+        <li><strong>XSS Protection:</strong> HTML entity encoding, CSP headers</li>
+        <li><strong>MongoDB Injection:</strong> Schema validation, operator sanitization</li>
+        <li><strong>SQL Injection:</strong> N/A (MongoDB used)</li>
+        <li><strong>CSRF:</strong> CORS configuration, same-site cookies</li>
+        <li><strong>File Upload:</strong> MIME type validation, size limits (5MB)</li>
+      </ul>
+
+      <h3>Security Headers</h3>
+      <pre><code>Content-Security-Policy: default-src 'self'
+X-Frame-Options: DENY
+X-Content-Type-Options: nosniff
+X-XSS-Protection: 1; mode=block
+Strict-Transport-Security: max-age=31536000
+Referrer-Policy: no-referrer</code></pre>
+
+      <h3>Data Protection</h3>
+      <ul style="margin-left: 1.5rem; margin-top: 1rem;">
+        <li>Passwords never logged or transmitted in plain text</li>
+        <li>Sensitive data excluded from responses (passwords, API keys)</li>
+        <li>TTL indexes for automatic cleanup of sensitive data</li>
+        <li>API keys hashed with SHA256</li>
+      </ul>
+    </div>
+
+    <!-- Deployment Section -->
+    <div class="section" id="deployment">
+      <h2>🚀 Deployment & DevOps</h2>
+
+      <h3>CI/CD Pipeline (GitHub Actions)</h3>
+      <p>Automated testing and deployment on push to main branch:</p>
+      <ol style="margin-left: 1.5rem; margin-top: 1rem;">
+        <li><strong>Test Stage:</strong> Run Jest integration tests with MongoDB</li>
+        <li><strong>Build Stage:</strong> Build Docker image and push to Docker Hub</li>
+        <li><strong>Deploy Stage:</strong> Trigger Render.com deployment webhook</li>
+      </ol>
+
+      <h3>Docker Configuration</h3>
+      <pre><code># Multi-stage build
+FROM node:18-alpine AS builder
+WORKDIR /app
+COPY package*.json ./
+RUN npm install
+
+FROM node:18-alpine
+WORKDIR /app
+COPY --from=builder /app/node_modules ./node_modules
+COPY . .
+EXPOSE 10000
+CMD ["node", "BACKEND/server.js"]</code></pre>
+
+      <h3>Environment Variables Required</h3>
+      <table>
+        <tr>
+          <th>Variable</th>
+          <th>Purpose</th>
+          <th>Example</th>
+        </tr>
+        <tr>
+          <td>PORT</td>
+          <td>Server port</td>
+          <td>5000</td>
+        </tr>
+        <tr>
+          <td>MONGO_URI</td>
+          <td>MongoDB connection string</td>
+          <td>mongodb+srv://user:pass@cluster.mongodb.net/db</td>
+        </tr>
+        <tr>
+          <td>JWT_SECRET</td>
+          <td>JWT signing secret</td>
+          <td>your-secret-key-here</td>
+        </tr>
+        <tr>
+          <td>CLOUDINARY_CLOUD_NAME</td>
+          <td>Cloudinary account name</td>
+          <td>your-cloud-name</td>
+        </tr>
+        <tr>
+          <td>CLOUDINARY_API_KEY</td>
+          <td>Cloudinary API key</td>
+          <td>your-api-key</td>
+        </tr>
+        <tr>
+          <td>NODE_ENV</td>
+          <td>Environment</td>
+          <td>production</td>
+        </tr>
+      </table>
+
+      <h3>Monitoring & Logging</h3>
+      <ul style="margin-left: 1.5rem; margin-top: 1rem;">
+        <li><strong>Real-time Logs:</strong> In-memory store (last 100 entries)</li>
+        <li><strong>Metrics:</strong> Request counts, response times, status codes</li>
+        <li><strong>Health Check:</strong> GET /health - returns DB status, uptime, memory</li>
+        <li><strong>Security Events:</strong> Rate limiting violations, auth failures</li>
+        <li><strong>File Logging:</strong> Optional JSON lines logging to disk</li>
+      </ul>
+
+      <h3>Deployment Platforms Supported</h3>
+      <ul style="margin-left: 1.5rem; margin-top: 1rem;">
+        <li><strong>Render.com</strong> (Primary - deployed)</li>
+        <li><strong>Heroku</strong> (Dockerfile compatible)</li>
+        <li><strong>AWS (ECS/Fargate)</strong> (Docker compatible)</li>
+        <li><strong>Digital Ocean</strong> (Docker compatible)</li>
+        <li><strong>Local Docker Compose</strong> (Development)</li>
+      </ul>
+    </div>
+
+    <!-- FAQ Section -->
+    <div class="section" id="faq">
+      <h2>❓ Frequently Asked Questions</h2>
+
+      <h3>How do I report a lost item?</h3>
+      <p>1. Click "Get Started" on the home page<br>
+      2. Enter your student ID and name<br>
+      3. Fill in the item details, select category and status<br>
+      4. Upload a photo (optional)<br>
+      5. Click "Submit Item"</p>
+
+      <h3>How long are items stored in the system?</h3>
+      <p>Items are automatically removed after <strong>30 days</strong>. After this period, you can repost the item if needed.</p>
+
+      <h3>Can I edit my item report after posting?</h3>
+      <p>Currently, you cannot edit items directly. Please contact an admin to modify or delete an incorrectly posted item.</p>
+
+      <h3>How do I get notified about matching items?</h3>
+      <p>When you post a found item, the system automatically notifies anyone who posted a similar lost item. Check the notification section for updates.</p>
+
+      <h3>What image formats are supported?</h3>
+      <p>Supported formats: JPG, JPEG, PNG, GIF, WebP. Maximum file size: 5 MB.</p>
+
+      <h3>Is my contact information private?</h3>
+      <p>Yes, your name and contact information are only visible to other users who are also browsing the lost & found items. They will not be shared with anyone else.</p>
+
+      <h3>What are API keys used for?</h3>
+      <p>API keys allow third-party applications to access the Lost & Found system data. They can be generated in the admin panel with specific permissions.</p>
+
+      <h3>How do I report a security issue?</h3>
+      <p>Please email admin@lostandfound.tip.edu.ph with details. Do not post security vulnerabilities publicly.</p>
+
+      <h3>Can I access the system via mobile?</h3>
+      <p>Yes! The system is fully responsive and works on all devices including phones and tablets.</p>
+
+      <h3>What happens if I mark an item as "Claimed"?</h3>
+      <p>Marking an item as claimed removes it from the active lost & found listings and archives it for record-keeping purposes.</p>
+    </div>
+  </div>
+
+  <!-- Back to Top Button -->
+  <div class="back-to-top" onclick="scrollToTop()">
+    <i class="fas fa-arrow-up"></i>
+  </div>
+
+  <!-- Footer -->
+  <footer>
+    <p>&copy; 2024 Lost & Found @ TIP Manila | All Rights Reserved</p>
+    <p>For support, contact: admin@lostandfound.tip.edu.ph</p>
+  </footer>
+
+  <script>
+    function switchSection(sectionId) {
+      event.preventDefault();
+
+      // Hide all sections
+      document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+
+      // Show selected section
+      document.getElementById(sectionId).classList.add('active');
+
+      // Scroll to top
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function scrollToTop() {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    // Show back-to-top button on scroll
+    window.addEventListener('scroll', () => {
+      const btn = document.querySelector('.back-to-top');
+      if (window.scrollY > 300) {
+        btn.classList.add('show');
+      } else {
+        btn.classList.remove('show');
+      }
+    });
+
+    // Highlight code blocks
+    document.addEventListener('DOMContentLoaded', () => {
+      document.querySelectorAll('pre code').forEach(block => {
+        hljs.highlightElement(block);
+      });
+    });
+  </script>
+</body>
+</html>
