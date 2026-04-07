@@ -11,7 +11,7 @@ import analyticsRoutes from './routes/analyticsRoutes.js';
 import apiKeyRoutes from './routes/apiKeyRoutes.js';
 import { requestLogger, getRecentLogs } from './middleware/eventLogger.js';
 import { initializeOrchestration } from './middleware/orchestration.js';
-import { rateLimit, mongoSanitize, securityHeaders } from './middleware/rateLimiter.js';
+import { rateLimit, mongoSanitize, xssProtection, securityHeaders } from './middleware/rateLimiter.js';
 import fs from 'fs';
 
 // Load environment variables
@@ -37,6 +37,7 @@ app.use(express.urlencoded({ extended: true, limit: '10kb' }));
 
 // ── Security middleware ───────────────────────────────────────────────────────
 app.use(mongoSanitize);
+app.use(xssProtection);
 
 // ── Event-based request logger (message queue middleware) ─────────────────────
 app.use(requestLogger);
