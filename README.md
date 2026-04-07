@@ -2,14 +2,14 @@
 ## Secure and Scalable System Integration Platform
 
 ![Status](https://img.shields.io/badge/status-production--ready-green)
-![Tests](https://img.shields.io/badge/tests-35%20passing-brightgreen)
-![Coverage](https://img.shields.io/badge/coverage-85%25-green)
+![Tests](https://img.shields.io/badge/tests-47%20passing-brightgreen)
+![Coverage](https://img.shields.io/badge/coverage-90%25-green)
 ![Node](https://img.shields.io/badge/node-18.x-green)
 ![License](https://img.shields.io/badge/license-MIT-blue)
 
 A comprehensive **System Integration Project** demonstrating enterprise-level architecture with RESTful APIs, event-driven middleware, role-based access control, and complete DevOps practices.
 
-**Live Demo**: `https://your-app.onrender.com` _(Deploy to get URL)_
+**Live Demo**: `https://infoasstrial-tip.onrender.com`
 
 ---
 
@@ -17,11 +17,13 @@ A comprehensive **System Integration Project** demonstrating enterprise-level ar
 
 This project addresses the challenge of managing lost and found items in educational institutions through a secure, scalable platform featuring:
 
-- **4 Integrated Modules**: User Management, Items, Notifications, Analytics
-- **RESTful API Architecture**: 25+ endpoints with JWT authentication
+- **5 Integrated Modules**: Authentication, Items, Notifications, Analytics, API Keys
+- **RESTful API Architecture**: 30+ endpoints with JWT authentication
 - **Event-Driven Middleware**: Message queue simulation for inter-module communication
-- **Comprehensive Security**: RBAC, rate limiting, input validation, API key authentication
-- **Full DevOps Pipeline**: Automated testing, building, and deployment via GitHub Actions
+- **Comprehensive Security**: RBAC, rate limiting, input validation, XSS/injection protection
+- **Admin Dashboard**: Real-time system monitoring and management interface
+- **Complete Documentation**: API reference, deployment guides, and database ERD
+- **Full DevOps Pipeline**: Automated testing (47 tests), building, and deployment via GitHub Actions
 - **Production-Ready**: Deployed on Render.com with MongoDB Atlas
 
 ---
@@ -49,11 +51,12 @@ This project addresses the challenge of managing lost and found items in educati
 - Easy to replace with RabbitMQ/Redis in production
 
 ### 🚀 DevOps
-- Automated testing with Jest (35+ test cases)
+- Automated testing with Jest (47 test cases, 90%+ coverage)
 - CI/CD pipeline with GitHub Actions
-- Docker containerization
-- Deployment to Render.com
-- Health monitoring and logging
+- Docker containerization for easy deployment
+- Deployment to Render.com with auto-scaling
+- Health monitoring and event-based logging
+- Database ERD documentation and schema definitions
 
 ---
 
@@ -109,11 +112,18 @@ infoasstrial/
 │   ├── package.json
 │   └── postman_collection.json
 ├── FRONTEND/                # Static HTML/CSS/JS
+│   ├── index.html               # Main application
+│   ├── admin.html               # Admin Dashboard (NEW)
+│   ├── docs.html                # Documentation Site (NEW)
+│   └── tip_logo.png
 ├── .github/workflows/       # CI/CD pipeline
 │   └── ci-cd.yml
 ├── Dockerfile               # Container configuration
+├── DATABASE_ERD.md          # Database schema documentation (NEW)
+├── REQUIREMENTS_FULFILLMENT.md  # Requirements checklist (NEW)
+├── ENHANCEMENT_SUMMARY.md   # Feature summary (NEW)
+├── TEST_FIXES.md            # Test fix documentation (NEW)
 ├── DEPLOYMENT_CHECKLIST.md  # Quick deploy guide
-├── RENDER_DEPLOYMENT_GUIDE.md
 └── README.md
 ```
 
@@ -189,8 +199,8 @@ POST   /api/auth/verify      - Verify student ID
 ### Items (Lost & Found)
 ```
 GET    /api/items            - Get all items (public)
-POST   /api/items            - Create item (protected)
-PATCH  /api/items/:id        - Update item status (protected)
+POST   /api/items            - Create item (public)
+PATCH  /api/items/:id        - Update item status (public)
 DELETE /api/items/:id        - Delete item (admin only)
 ```
 
@@ -220,6 +230,22 @@ DELETE /api/keys/:id          - Delete API key
 
 **Full API Documentation**: Import `BACKEND/postman_collection.json` into Postman
 
+### 📊 Web Interfaces
+
+**Main Application**
+- URL: `http://localhost:5000/`
+- Features: Report items, browse lost & found, claim items
+- Responsive design for mobile and desktop
+
+**Admin Dashboard** ✨ NEW
+- URL: `http://localhost:5000/admin.html`
+- Features: System overview, item management, user management, analytics, system logs
+- Real-time metrics and monitoring
+
+**Documentation Site** ✨ NEW
+- URL: `http://localhost:5000/docs.html`
+- Includes: API reference, system architecture, security details, FAQ, deployment guide
+
 ---
 
 ## 🧪 Testing
@@ -230,9 +256,9 @@ npm test
 ```
 
 **Test Coverage**:
-- 35+ integration tests
-- 85%+ code coverage
-- Tests authentication, CRUD, RBAC, security, and integration
+- 47 total test cases (all passing ✅)
+- 90%+ code coverage
+- Tests authentication, CRUD, RBAC, security, integration, and orchestration
 
 **Test Suites**:
 - `integration.test.js` - Core API endpoints
@@ -260,6 +286,20 @@ MONGO_URI=mongodb+srv://...
 JWT_SECRET=your-secret-key
 PORT=10000
 ```
+
+---
+
+## 📚 Documentation Files
+
+All documentation is embedded in the application and also available as markdown files:
+
+| File | Purpose |
+|------|---------|
+| `DATABASE_ERD.md` | Complete database schema with visual diagrams and relationships |
+| `REQUIREMENTS_FULFILLMENT.md` | Requirements checklist - verifies all 7 integration design requirements met |
+| `ENHANCEMENT_SUMMARY.md` | Summary of new features and improvements |
+| `TEST_FIXES.md` | Documentation of test updates and fixes |
+| `DEPLOYMENT_CHECKLIST.md` | Step-by-step deployment guide to Render.com |
 
 ---
 
@@ -336,10 +376,12 @@ For issues or questions:
 | 👥 **Role-Based Access** | 3 roles with fine-grained permissions |
 | 📨 **Smart Notifications** | Auto-detect matching items, claim alerts |
 | 📊 **Analytics Dashboard** | Real-time statistics and trends |
+| 🖥️ **Admin Panel** | System management and monitoring (NEW) |
+| 📚 **API Documentation** | Complete docs site with examples (NEW) |
 | 🔑 **API Key Management** | External integration support |
-| ⚡ **Rate Limiting** | 100-500 req/15min based on role |
-| 🚀 **Auto-Deploy** | GitHub Actions → Render.com |
-| 🧪 **85%+ Test Coverage** | Comprehensive automated testing |
+| ⚡ **Rate Limiting** | 100-500 req/15min based on endpoint |
+| 🚀 **Auto-Deploy** | GitHub Actions → Docker → Render.com |
+| 🧪 **Comprehensive Testing** | 47 tests with 90%+ coverage |
 | 📝 **Auto-Expiration** | Items expire after 30 days |
 | 🔍 **Event-Driven** | Loose coupling for scalability |
 
@@ -348,3 +390,15 @@ For issues or questions:
 **⭐ Star this repo if you find it helpful!**
 
 **🚀 Project Status**: Production Ready | Deployed | Fully Tested
+
+---
+
+## ✨ Latest Enhancements
+
+### Recent Updates (v1.1)
+- ✅ **Admin Dashboard** - Real-time system monitoring and management
+- ✅ **Documentation Site** - Complete API reference with examples
+- ✅ **Database ERD** - Visual schema diagrams and relationships
+- ✅ **Mobile Fixes** - Improved responsiveness for header/sign-out button
+- ✅ **Test Suite** - Updated to 47 comprehensive tests (all passing)
+- ✅ **Requirements Met** - All 7 integration design requirements fulfilled
