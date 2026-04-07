@@ -204,9 +204,10 @@ describe('TC-06 — POST /api/items', () => {
     createdItemId = res.body._id;
   });
 
-  test('Returns 401 without token', async () => {
+  test('Public endpoint: allows submission without token', async () => {
     const res = await request(app).post('/api/items').send(validItem);
-    expect(res.status).toBe(401);
+    expect(res.status).toBe(201);
+    expect(res.body.itemName).toBe('Blue Umbrella');
   });
 
   test('Returns 422 for missing required fields', async () => {
@@ -249,12 +250,13 @@ describe('TC-07 — PATCH /api/items/:id', () => {
     expect(res.body.status).toBe('claimed');
   });
 
-  test('Returns 401 without token', async () => {
+  test('Public endpoint: allows status update without token', async () => {
     if (!createdItemId) return;
     const res = await request(app)
       .patch(`/api/items/${createdItemId}`)
       .send({ status: 'claimed' });
-    expect(res.status).toBe(401);
+    expect(res.status).toBe(200);
+    expect(res.body.status).toBe('claimed');
   });
 });
 
