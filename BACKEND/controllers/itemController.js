@@ -1,4 +1,5 @@
 import Item from '../models/itemModel.js';
+import { eventBus } from '../middleware/eventLogger.js';
 
 export const getItems = async (req, res) => {
   try {
@@ -46,7 +47,16 @@ export const postItem = async (req, res) => {
 
     const newItem = new Item(itemData);
     const savedItem = await newItem.save();
-    
+
+    // Emit notification event
+    eventBus.emit('notification:item_posted', {
+      itemId: savedItem._id,
+      itemName: savedItem.itemName,
+      studentName: savedItem.studentName,
+      status: savedItem.status,
+      timestamp: new Date().toISOString()
+    });
+
     console.log('Item saved successfully:', savedItem);  // Debug log
     res.status(201).json(savedItem);
   } catch (err) {
@@ -67,6 +77,18 @@ export const postItem = async (req, res) => {
 export const updateItemStatus = async (req, res) => {
   try {
     const updated = await Item.findByIdAndUpdate(req.params.id, { status: req.body.status }, { new: true });
+
+    // Emit notification event if status changed to claimed
+    if (req.body.status === 'claimed' && updated) {
+      eventBus.emit('notification:item_claimed', {
+        itemId: updated._id,
+        itemName: updated.itemName,
+        studentName: updated.studentName,
+        status: updated.status,
+        timestamp: new Date().toISOString()
+      });
+    }
+
     res.json(updated);
   } catch (err) {
     res.status(500).json({ error: err.message });

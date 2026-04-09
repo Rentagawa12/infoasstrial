@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>User Profile - Lost & Found @ TIP Manila</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="css/profile-styles.css">
+</head>
+<body>
+  <!-- Navigation Header -->
+  <header class="navbar">
+    <div class="navbar-container">
+      <div class="navbar-left">
+        <img src="tip_logo.png" alt="TIP Logo" class="navbar-logo">
+        <h1 class="navbar-title">Lost & Found @ TIP Manila</h1>
+      </div>
+      <nav class="navbar-menu">
+        <a href="index.html" class="nav-link"><i class="fas fa-home"></i> Home</a>
+        <a href="my-items.html" class="nav-link"><i class="fas fa-box"></i> My Items</a>
+        <a href="notifications.html" class="nav-link"><i class="fas fa-bell"></i> Notifications</a>
+        <a href="user-profile.html" class="nav-link active"><i class="fas fa-user"></i> Profile</a>
+        <a href="settings.html" class="nav-link"><i class="fas fa-cog"></i> Settings</a>
+        <a id="adminLink" href="admin-dashboard.html" class="nav-link admin-only" style="display:none;">
+          <i class="fas fa-chart-pie"></i> Admin
+        </a>
+      </nav>
+      <div class="navbar-right">
+        <button class="logout-btn" onclick="handleLogout();">
+          <i class="fas fa-sign-out-alt"></i> Logout
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Profile Container -->
+  <main class="profile-main">
+    <div class="profile-container">
+      <!-- Sidebar -->
+      <aside class="profile-sidebar">
+        <div class="profile-avatar-section">
+          <div class="profile-avatar">
+            <i class="fas fa-user-circle"></i>
+          </div>
+          <h2 class="profile-name" id="profileName">Loading...</h2>
+          <p class="profile-email" id="profileEmail">loading@email.com</p>
+          <p class="profile-role" id="profileRole">User</p>
+        </div>
+
+        <nav class="profile-nav">
+          <a href="#profile" class="profile-nav-link active" onclick="switchTab('profile')">
+            <i class="fas fa-user"></i> Profile Info
+          </a>
+          <a href="#statistics" class="profile-nav-link" onclick="switchTab('statistics')">
+            <i class="fas fa-chart-line"></i> Statistics
+          </a>
+          <a href="#security" class="profile-nav-link" onclick="switchTab('security')">
+            <i class="fas fa-lock"></i> Security
+          </a>
+          <a href="#notifications-pref" class="profile-nav-link" onclick="switchTab('notifications-pref')">
+            <i class="fas fa-bell"></i> Notifications
+          </a>
+        </nav>
+      </aside>
+
+      <!-- Main Content -->
+      <section class="profile-content">
+        <!-- Profile Info Tab -->
+        <div id="profile-tab" class="profile-tab active">
+          <div class="tab-header">
+            <h2><i class="fas fa-user-circle"></i> Profile Information</h2>
+            <button class="edit-btn" id="editProfileBtn" onclick="toggleEditMode()">
+              <i class="fas fa-edit"></i> Edit Profile
+            </button>
+          </div>
+
+          <div class="profile-form" id="profileForm" style="display: none;">
+            <div class="form-row">
+              <div class="form-group">
+                <label for="editUsername">Username</label>
+                <input type="text" id="editUsername" class="form-control" placeholder="Enter username">
+              </div>
+              <div class="form-group">
+                <label for="editEmail">Email</label>
+                <input type="email" id="editEmail" class="form-control" placeholder="Enter email">
+              </div>
+            </div>
+            <div class="button-group">
+              <button class="btn btn-primary" onclick="saveProfile()">
+                <i class="fas fa-save"></i> Save Changes
+              </button>
+              <button class="btn btn-secondary" onclick="toggleEditMode()">
+                <i class="fas fa-times"></i> Cancel
+              </button>
+            </div>
+          </div>
+
+          <div class="info-grid" id="profileInfo">
+            <div class="info-card">
+              <label>Username</label>
+              <p id="displayUsername">Loading...</p>
+            </div>
+            <div class="info-card">
+              <label>Email</label>
+              <p id="displayEmail">Loading...</p>
+            </div>
+            <div class="info-card">
+              <label>Role</label>
+              <p id="displayRole">User</p>
+            </div>
+            <div class="info-card">
+              <label>Member Since</label>
+              <p id="memberSince">Loading...</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Statistics Tab -->
+        <div id="statistics-tab" class="profile-tab">
+          <div class="tab-header">
+            <h2><i class="fas fa-chart-line"></i> Activity Statistics</h2>
+          </div>
+
+          <div class="stats-grid">
+            <div class="stat-card">
+              <div class="stat-icon posted">
+                <i class="fas fa-plus-circle"></i>
+              </div>
+              <div class="stat-info">
+                <p class="stat-label">Items Posted</p>
+                <p class="stat-value" id="statsPosted">0</p>
+              </div>
+            </div>
+
+            <div class="stat-card">
+              <div class="stat-icon claimed">
+                <i class="fas fa-check-circle"></i>
+              </div>
+              <div class="stat-info">
+                <p class="stat-label">Items Claimed</p>
+                <p class="stat-value" id="statsClaimed">0</p>
+              </div>
+            </div>
+
+            <div class="stat-card">
+              <div class="stat-icon found">
+                <i class="fas fa-search"></i>
+              </div>
+              <div class="stat-info">
+                <p class="stat-label">Items Found</p>
+                <p class="stat-value" id="statsFound">0</p>
+              </div>
+            </div>
+
+            <div class="stat-card">
+              <div class="stat-icon lost">
+                <i class="fas fa-exclamation-circle"></i>
+              </div>
+              <div class="stat-info">
+                <p class="stat-label">Items Lost</p>
+                <p class="stat-value" id="statsLost">0</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Security Tab -->
+        <div id="security-tab" class="profile-tab">
+          <div class="tab-header">
+            <h2><i class="fas fa-lock"></i> Security Settings</h2>
+          </div>
+
+          <div class="security-section">
+            <h3>Change Password</h3>
+            <form id="changePasswordForm" onsubmit="handleChangePassword(event)">
+              <div class="form-group">
+                <label for="currentPassword">Current Password</label>
+                <input type="password" id="currentPassword" class="form-control" placeholder="Enter current password" required>
+              </div>
+              <div class="form-group">
+                <label for="newPassword">New Password</label>
+                <input type="password" id="newPassword" class="form-control" placeholder="Enter new password" required>
+              </div>
+              <div class="form-group">
+                <label for="confirmPassword">Confirm Password</label>
+                <input type="password" id="confirmPassword" class="form-control" placeholder="Confirm new password" required>
+              </div>
+              <button type="submit" class="btn btn-primary">
+                <i class="fas fa-key"></i> Change Password
+              </button>
+            </form>
+          </div>
+
+          <div class="security-section danger-zone">
+            <h3>Danger Zone</h3>
+            <p>Permanently delete your account and all associated data.</p>
+            <button class="btn btn-danger" onclick="showDeleteConfirm()">
+              <i class="fas fa-trash"></i> Delete Account
+            </button>
+          </div>
+        </div>
+
+        <!-- Notifications Preferences Tab -->
+        <div id="notifications-pref-tab" class="profile-tab">
+          <div class="tab-header">
+            <h2><i class="fas fa-bell"></i> Notification Preferences</h2>
+          </div>
+
+          <div class="preferences-grid">
+            <div class="preference-card">
+              <div class="preference-header">
+                <h3>Item Posted</h3>
+                <label class="toggle-switch">
+                  <input type="checkbox" id="notifyItemPosted" checked>
+                  <span class="toggle-slider"></span>
+                </label>
+              </div>
+              <p>Get notified when a new item is posted to the system</p>
+            </div>
+
+            <div class="preference-card">
+              <div class="preference-header">
+                <h3>Item Claimed</h3>
+                <label class="toggle-switch">
+                  <input type="checkbox" id="notifyItemClaimed" checked>
+                  <span class="toggle-slider"></span>
+                </label>
+              </div>
+              <p>Get notified when your posted items are claimed</p>
+            </div>
+
+            <div class="preference-card">
+              <div class="preference-header">
+                <h3>Admin Notices</h3>
+                <label class="toggle-switch">
+                  <input type="checkbox" id="notifyAdminNotices" checked>
+                  <span class="toggle-slider"></span>
+                </label>
+              </div>
+              <p>Receive important announcements from administrators</p>
+            </div>
+
+            <div class="preference-card">
+              <div class="preference-header">
+                <h3>Email Notifications</h3>
+                <label class="toggle-switch">
+                  <input type="checkbox" id="notifyEmail">
+                  <span class="toggle-slider"></span>
+                </label>
+              </div>
+              <p>Receive notifications via email</p>
+            </div>
+          </div>
+
+          <div class="button-group" style="margin-top: 2rem;">
+            <button class="btn btn-primary" onclick="saveNotificationPreferences()">
+              <i class="fas fa-save"></i> Save Preferences
+            </button>
+          </div>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <!-- Delete Confirmation Modal -->
+  <div id="deleteModal" class="modal">
+    <div class="modal-content">
+      <div class="modal-header danger">
+        <h2><i class="fas fa-exclamation-triangle"></i> Delete Account</h2>
+      </div>
+      <div class="modal-body">
+        <p>This action cannot be undone. Please type your password to confirm:</p>
+        <input type="password" id="deletePassword" class="form-control" placeholder="Enter your password">
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary" onclick="closeDeleteModal()">Cancel</button>
+        <button class="btn btn-danger" onclick="confirmDeleteAccount()">Delete My Account</button>
+      </div>
+    </div>
+  </div>
+
+  <script type="module">
+    import { api } from './js/api.js';
+    window.api = api;
+
+    let currentUser = null;
+
+    // Initialize profile on page load
+    async function initProfile() {
+      try {
+        if (!api.isAuthenticated()) {
+          window.location.href = '/index.html';
+          return;
+        }
+
+        currentUser = await api.getCurrentUser();
+        displayProfile();
+        loadStatistics();
+
+        // Check if user is admin
+        if (currentUser.role === 'admin') {
+          document.getElementById('adminLink').style.display = 'flex';
+        }
+      } catch (error) {
+        console.error('Error loading profile:', error);
+        alert('Failed to load profile. Redirecting to home...');
+        window.location.href = '/index.html';
+      }
+    }
+
+    function displayProfile() {
+      document.getElementById('profileName').textContent = currentUser.username;
+      document.getElementById('profileEmail').textContent = currentUser.email;
+      document.getElementById('profileRole').textContent = currentUser.role === 'admin' ? 'Administrator' : 'User';
+
+      document.getElementById('displayUsername').textContent = currentUser.username;
+      document.getElementById('displayEmail').textContent = currentUser.email;
+      document.getElementById('displayRole').textContent = currentUser.role === 'admin' ? 'Administrator' : 'User';
+
+      const createdDate = new Date(currentUser.createdAt).toLocaleDateString();
+      document.getElementById('memberSince').textContent = createdDate;
+
+      // Populate edit form
+      document.getElementById('editUsername').value = currentUser.username;
+      document.getElementById('editEmail').value = currentUser.email;
+    }
+
+    async function loadStatistics() {
+      try {
+        const response = await api.getUserItems(1, 1000);
+        const items = response.items || [];
+
+        const posted = items.length;
+        const claimed = items.filter(i => i.status === 'claimed').length;
+        const found = items.filter(i => i.status === 'found').length;
+        const lost = items.filter(i => i.status === 'lost').length;
+
+        document.getElementById('statsPosted').textContent = posted;
+        document.getElementById('statsClaimed').textContent = claimed;
+        document.getElementById('statsFound').textContent = found;
+        document.getElementById('statsLost').textContent = lost;
+      } catch (error) {
+        console.error('Error loading statistics:', error);
+      }
+    }
+
+    function switchTab(tabName) {
+      // Hide all tabs
+      document.querySelectorAll('.profile-tab').forEach(tab => {
+        tab.classList.remove('active');
+      });
+      document.querySelectorAll('.profile-nav-link').forEach(link => {
+        link.classList.remove('active');
+      });
+
+      // Show selected tab
+      document.getElementById(tabName + '-tab').classList.add('active');
+      event.target.classList.add('active');
+    }
+
+    function toggleEditMode() {
+      document.getElementById('profileForm').style.display =
+        document.getElementById('profileForm').style.display === 'none' ? 'block' : 'none';
+    }
+
+    async function saveProfile() {
+      try {
+        const userData = {
+          username: document.getElementById('editUsername').value,
+          email: document.getElementById('editEmail').value
+        };
+
+        await api.updateUserProfile(userData);
+        alert('Profile updated successfully!');
+        currentUser = { ...currentUser, ...userData };
+        displayProfile();
+        toggleEditMode();
+      } catch (error) {
+        alert('Error updating profile: ' + error.message);
+      }
+    }
+
+    function handleChangePassword(e) {
+      e.preventDefault();
+      alert('Password change feature coming soon!');
+    }
+
+    function showDeleteConfirm() {
+      document.getElementById('deleteModal').style.display = 'flex';
+    }
+
+    function closeDeleteModal() {
+      document.getElementById('deleteModal').style.display = 'none';
+      document.getElementById('deletePassword').value = '';
+    }
+
+    async function confirmDeleteAccount() {
+      const password = document.getElementById('deletePassword').value;
+      if (!password) {
+        alert('Please enter your password');
+        return;
+      }
+
+      try {
+        await api.deleteUserAccount(password);
+        alert('Account deleted successfully');
+        api.clearToken();
+        window.location.href = '/index.html';
+      } catch (error) {
+        alert('Error deleting account: ' + error.message);
+      }
+    }
+
+    function saveNotificationPreferences() {
+      const prefs = {
+        itemPosted: document.getElementById('notifyItemPosted').checked,
+        itemClaimed: document.getElementById('notifyItemClaimed').checked,
+        adminNotices: document.getElementById('notifyAdminNotices').checked,
+        email: document.getElementById('notifyEmail').checked
+      };
+      localStorage.setItem('notificationPrefs', JSON.stringify(prefs));
+      alert('Notification preferences saved!');
+    }
+
+    function handleLogout() {
+      api.clearToken();
+      window.location.href = '/index.html';
+    }
+
+    // Initialize when page loads
+    window.addEventListener('DOMContentLoaded', initProfile);
+
+    // Make functions global
+    window.switchTab = switchTab;
+    window.toggleEditMode = toggleEditMode;
+    window.saveProfile = saveProfile;
+    window.handleChangePassword = handleChangePassword;
+    window.showDeleteConfirm = showDeleteConfirm;
+    window.closeDeleteModal = closeDeleteModal;
+    window.confirmDeleteAccount = confirmDeleteAccount;
+    window.saveNotificationPreferences = saveNotificationPreferences;
+    window.handleLogout = handleLogout;
+  </script>
+</body>
+</html>

@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Dashboard - Lost & Found</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="css/profile-styles.css">
+  <style>
+    .admin-container { max-width: 1400px; margin: 2rem auto; padding: 0 2rem; }
+    .dashboard-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 2rem; margin-bottom: 3rem; }
+    .dashboard-card { background: white; padding: 2rem; border-radius: var(--radius-lg); box-shadow: var(--shadow-md); text-align: center; }
+    .dashboard-card .big-number { font-size: 2.5rem; font-weight: 700; color: var(--primary); }
+    .dashboard-card .label { color: var(--text-light); margin-top: 0.5rem; }
+    .tabs { display: flex; gap: 1rem; margin-bottom: 2rem; border-bottom: 2px solid var(--border); }
+    .tab-btn { padding: 1rem; background: none; border: none; border-bottom: 3px solid transparent; cursor: pointer; font-weight: 600; color: var(--text); transition: all 0.3s; }
+    .tab-btn.active { border-bottom-color: var(--primary); color: var(--primary); }
+  </style>
+</head>
+<body>
+  <header class="navbar">
+    <div class="navbar-container">
+      <img src="tip_logo.png" alt="TIP Logo" class="navbar-logo">
+      <h1 class="navbar-title">Admin Dashboard</h1>
+      <button class="logout-btn" onclick="api.clearToken(); location.href='/index.html';">Logout</button>
+    </div>
+  </header>
+
+  <main class="admin-container">
+    <h1 style="margin-bottom: 2rem;"><i class="fas fa-chart-pie"></i> Admin Dashboard</h1>
+
+    <div class="dashboard-grid" id="statsGrid">
+      <div class="dashboard-card"><div class="big-number" id="totalUsers">0</div><div class="label">Total Users</div></div>
+      <div class="dashboard-card"><div class="big-number" id="totalItems">0</div><div class="label">Total Items</div></div>
+      <div class="dashboard-card"><div class="big-number" id="claimedItems">0</div><div class="label">Claimed Items</div></div>
+      <div class="dashboard-card"><div class="big-number" id="lostItems">0</div><div class="label">Lost Items</div></div>
+    </div>
+
+    <div class="tabs">
+      <button class="tab-btn active" onclick="switchTab('users')"><i class="fas fa-users"></i> Users</button>
+      <button class="tab-btn" onclick="switchTab('items')"><i class="fas fa-box"></i> Items</button>
+      <button class="tab-btn" onclick="switchTab('logs')"><i class="fas fa-file-alt"></i> Logs</button>
+    </div>
+
+    <div id="users-tab">
+      <table class="items-table" style="width: 100%; background: white; border-radius: var(--radius-lg); box-shadow: var(--shadow-md); overflow: hidden;">
+        <thead style="background: linear-gradient(135deg, var(--primary), var(--primary-dark));"><tr><th style="padding: 1rem;">Username</th><th style="padding: 1rem;">Email</th><th style="padding: 1rem;">Role</th><th style="padding: 1rem;">Actions</th></tr></thead>
+        <tbody id="usersList"></tbody>
+      </table>
+    </div>
+
+    <div id="items-tab" style="display: none;">
+      <table class="items-table" style="width: 100%; background: white; border-radius: var(--radius-lg); box-shadow: var(--shadow-md); overflow: hidden;">
+        <thead style="background: linear-gradient(135deg, var(--primary), var(--primary-dark));"><tr><th style="padding: 1rem;">Item Name</th><th style="padding: 1rem;">Status</th><th style="padding: 1rem;">Posted By</th><th style="padding: 1rem;">Actions</th></tr></thead>
+        <tbody id="itemsList"></tbody>
+      </table>
+    </div>
+
+    <div id="logs-tab" style="display: none;">
+      <pre id="logsContent" style="background: var(--dark-gray); color: #00ff00; padding: 1.5rem; border-radius: var(--radius-lg); overflow-x: auto; font-size: 0.9rem;"></pre>
+    </div>
+  </main>
+
+  <script type="module">
+    import { api } from './js/api.js';
+    window.api = api;
+
+    async function initAdmin() {
+      if (!api.isAuthenticated()) return location.href = '/index.html';
+      try {
+        const user = await api.getCurrentUser();
+        if (user.role !== 'admin') return location.href = '/index.html';
+
+        const dashboard = await api.getAdminDashboard();
+        document.getElementById('totalUsers').textContent = dashboard.summary.totalUsers;
+        document.getElementById('totalItems').textContent = dashboard.summary.totalItems;
+        document.getElementById('claimedItems').textContent = dashboard.summary.claimedItems;
+        document.getElementById('lostItems').textContent = dashboard.summary.lostItems;
+
+        await loadUsers();
+      } catch (error) {
+        alert('Error loading admin dashboard');
+        location.href = '/index.html';
+      }
+    }
+
+    async function loadUsers() {
+      try {
+        const response = await api.getAllUsers();
+        document.getElementById('usersList').innerHTML = response.users.map(u => `
+          <tr><td style="padding: 1rem;">${u.username}</td><td style="padding: 1rem;">${u.email}</td><td style="padding: 1rem;">${u.role}</td><td style="padding: 1rem;"><button class="btn btn-danger" onclick="deleteUser('${u._id}')">Delete</button></td></tr>
+        `).join('');
+      } catch (error) {
+        console.error('Error loading users:', error);
+      }
+    }
+
+    async function loadItems() {
+      try {
+        const response = await api.getAllItems();
+        document.getElementById('itemsList').innerHTML = response.items.map(i => `
+          <tr><td style="padding: 1rem;">${i.itemName}</td><td style="padding: 1rem;">${i.status}</td><td style="padding: 1rem;">${i.studentName}</td><td style="padding: 1rem;"><button class="btn btn-danger" onclick="deleteItem('${i._id}')">Delete</button></td></tr>
+        `).join('');
+      } catch (error) {
+        console.error('Error loading items:', error);
+      }
+    }
+
+    async function loadLogs() {
+      try {
+        const response = await api.getSystemLogs();
+        document.getElementById('logsContent').textContent = JSON.stringify(response.logs, null, 2);
+      } catch (error) {
+        console.error('Error loading logs:', error);
+      }
+    }
+
+    function switchTab(tab) {
+      document.querySelectorAll('[id$="-tab"]').forEach(e => e.style.display = 'none');
+      document.getElementById(tab + '-tab').style.display = 'block';
+      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+      event.target.classList.add('active');
+
+      if (tab === 'items') loadItems();
+      else if (tab === 'logs') loadLogs();
+    }
+
+    async function deleteUser(id) {
+      if (confirm('Delete this user?')) {
+        try {
+          await api.deleteUserAdmin(id);
+          alert('User deleted');
+          await loadUsers();
+        } catch (error) {
+          alert('Error deleting user');
+        }
+      }
+    }
+
+    async function deleteItem(id) {
+      if (confirm('Delete this item?')) {
+        try {
+          await api.deleteItemAdmin(id);
+          alert('Item deleted');
+          await loadItems();
+        } catch (error) {
+          alert('Error deleting item');
+        }
+      }
+    }
+
+    window.switchTab = switchTab;
+    window.deleteUser = deleteUser;
+    window.deleteItem = deleteItem;
+    window.addEventListener('DOMContentLoaded', initAdmin);
+  </script>
+</body>
+</html>

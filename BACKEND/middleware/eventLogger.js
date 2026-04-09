@@ -38,6 +38,23 @@ eventBus.on('security', (entry) => {
   console.warn('[SECURITY]', entry.message, entry.meta || '');
 });
 
+// ── Notification events ──────────────────────────────────────────────────────
+eventBus.on('notification:item_posted', (entry) => {
+  const line = JSON.stringify({ ...entry, type: 'NOTIFICATION_ITEM_POSTED' }) + '\n';
+  fs.appendFileSync(logFile, line);
+  if (process.env.NODE_ENV !== 'test') {
+    console.log('[NOTIFICATION]', 'New item posted:', entry.itemName);
+  }
+});
+
+eventBus.on('notification:item_claimed', (entry) => {
+  const line = JSON.stringify({ ...entry, type: 'NOTIFICATION_ITEM_CLAIMED' }) + '\n';
+  fs.appendFileSync(logFile, line);
+  if (process.env.NODE_ENV !== 'test') {
+    console.log('[NOTIFICATION]', 'Item claimed:', entry.itemName);
+  }
+});
+
 // ── Producer: Express request-logger middleware ───────────────────────────────
 export const requestLogger = (req, res, next) => {
   const start = Date.now();

@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Notifications - Lost & Found</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="css/profile-styles.css">
+  <style>
+    .notifications-container { max-width: 800px; margin: 2rem auto; }
+    .notification-item {
+      background: var(--white);
+      padding: 1.5rem;
+      margin-bottom: 1rem;
+      border-radius: var(--radius-md);
+      border-left: 4px solid var(--primary);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: var(--shadow-sm);
+    }
+    .notification-item.unread { background: #fffbf0; }
+    .notification-content { flex: 1; }
+    .notification-type { font-size: 0.85rem; color: var(--text-light); text-transform: uppercase; }
+    .notification-message { font-size: 1rem; margin: 0.5rem 0; color: var(--text); }
+    .notification-time { font-size: 0.85rem; color: var(--text-light); }
+  </style>
+</head>
+<body>
+  <header class="navbar">
+    <div class="navbar-container">
+      <div class="navbar-left">
+        <img src="tip_logo.png" alt="TIP Logo" class="navbar-logo">
+        <h1 class="navbar-title">Notifications</h1>
+      </div>
+      <button class="logout-btn" onclick="api.clearToken(); location.href='/index.html';">Logout</button>
+    </div>
+  </header>
+
+  <main class="notifications-container">
+    <div style="display: flex; gap: 1rem; margin-bottom: 2rem;">
+      <button class="btn btn-primary" onclick="loadNotifications()"><i class="fas fa-sync"></i> Refresh</button>
+      <button class="btn btn-secondary" onclick="markAllRead()"><i class="fas fa-check-double"></i> Mark All as Read</button>
+    </div>
+    <div id="notificationsList"></div>
+  </main>
+
+  <script type="module">
+    import { api } from './js/api.js';
+    window.api = api;
+
+    async function loadNotifications() {
+      try {
+        if (!api.isAuthenticated()) location.href = '/index.html';
+        const response = await api.getNotifications();
+        const list = document.getElementById('notificationsList');
+
+        if (!response.notifications?.length) {
+          list.innerHTML = '<div class="empty-state"><i class="fas fa-inbox"></i><h2>No Notifications</h2></div>';
+          return;
+        }
+
+        list.innerHTML = response.notifications.map(n => `
+          <div class="notification-item ${!n.read ? 'unread' : ''}">
+            <div class="notification-content">
+              <div class="notification-type">${n.type}</div>
+              <div class="notification-message">${n.message}</div>
+              <div class="notification-time">${new Date(n.createdAt).toLocaleString()}</div>
+            </div>
+            <button class="btn btn-secondary" style="white-space: nowrap;" onclick="deleteNotification('${n._id}')">Delete</button>
+          </div>
+        `).join('');
+      } catch (error) {
+        document.getElementById('notificationsList').innerHTML = '<p style="color: red;">Error loading notifications</p>';
+      }
+    }
+
+    async function markAllRead() {
+      try {
+        await api.markAllNotificationsAsRead();
+        await loadNotifications();
+      } catch (error) {
+        alert('Error marking as read');
+      }
+    }
+
+    async function deleteNotification(id) {
+      try {
+        await api.deleteNotification(id);
+        await loadNotifications();
+      } catch (error) {
+        alert('Error deleting notification');
+      }
+    }
+
+    window.markAllRead = markAllRead;
+    window.deleteNotification = deleteNotification;
+    window.addEventListener('DOMContentLoaded', loadNotifications);
+  </script>
+</body>
+</html>
