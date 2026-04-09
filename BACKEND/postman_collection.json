@@ -131,6 +131,46 @@
           }
         },
         {
+          "name": "Admin Login",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 200) {",
+                  "    const token = pm.response.json().token;",
+                  "    pm.collectionVariables.set('jwt_token', token);",
+                  "    console.log('✅ Admin login successful!');",
+                  "    console.log('Admin token saved to environment');",
+                  "    console.log('You can now access admin-only endpoints');",
+                  "} else {",
+                  "    console.log('❌ Admin login failed');",
+                  "    console.log('Make sure user role is set to admin in MongoDB');",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"admin@tip.edu.ph\",\n  \"password\": \"Admin123456\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/api/auth/login",
+              "host": ["{{base_url}}"],
+              "path": ["api", "auth", "login"]
+            }
+          }
+        },
+        {
           "name": "Get Current User",
           "request": {
             "method": "GET",
@@ -160,6 +200,172 @@
               "raw": "{{base_url}}/api/auth/verify",
               "host": ["{{base_url}}"],
               "path": ["api", "auth", "verify"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Admin Management",
+      "item": [
+        {
+          "name": "Step 1: Register Admin User",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 201) {",
+                  "    pm.collectionVariables.set('jwt_token', pm.response.json().token);",
+                  "    console.log('✅ Admin user registered successfully!');",
+                  "    console.log('Token saved to environment');",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"username\": \"admin_user\",\n  \"email\": \"admin@tip.edu.ph\",\n  \"password\": \"Admin123456\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/api/auth/register",
+              "host": ["{{base_url}}"],
+              "path": ["api", "auth", "register"]
+            }
+          }
+        },
+        {
+          "name": "Step 2: Promote User to Admin (MongoDB Manual)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "INSTRUCTIONS - Run this in MongoDB:\n\n// Method 1: Using MongoDB Atlas UI\n1. Go to: https://www.mongodb.com/cloud/atlas\n2. Login to your account\n3. Click Browse Collections\n4. Select: lostandfound → users\n5. Find the user: admin@tip.edu.ph\n6. Click Edit (pencil icon)\n7. Change role from \"user\" to \"admin\"\n8. Click Update\n\n// Method 2: Using MongoDB Compass\n1. Download MongoDB Compass\n2. Connect with MONGO_URI\n3. Navigate to: lostandfound → users\n4. Find admin user\n5. Click Edit\n6. Change role to \"admin\"\n7. Click Update\n\n// Method 3: Using MongoDB Shell\ndb.users.updateOne(\n  { email: \"admin@tip.edu.ph\" },\n  { $set: { role: \"admin\" } }\n)\n\nExpected Response:\n{ acknowledged: true, modifiedCount: 1 }\n\n✅ Done! User is now admin",
+              "options": {
+                "raw": {
+                  "language": "text"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/api/auth/me",
+              "host": ["{{base_url}}"],
+              "path": ["api", "auth", "me"]
+            }
+          }
+        },
+        {
+          "name": "Step 3: Verify Admin Status",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/auth/me",
+              "host": ["{{base_url}}"],
+              "path": ["api", "auth", "me"]
+            }
+          }
+        },
+        {
+          "name": "Step 4: Login as Admin",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 200) {",
+                  "    pm.collectionVariables.set('jwt_token', pm.response.json().token);",
+                  "    console.log('✅ Admin login successful!');",
+                  "    console.log('Admin token saved');",
+                  "    console.log('You can now access admin endpoints');",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"admin@tip.edu.ph\",\n  \"password\": \"Admin123456\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/api/auth/login",
+              "host": ["{{base_url}}"],
+              "path": ["api", "auth", "login"]
+            }
+          }
+        },
+        {
+          "name": "Admin Dashboard Stats (Test)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/analytics/dashboard",
+              "host": ["{{base_url}}"],
+              "path": ["api", "analytics", "dashboard"]
+            }
+          }
+        },
+        {
+          "name": "Admin Activity Trends (Test)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/analytics/activity-trends?days=30",
+              "host": ["{{base_url}}"],
+              "path": ["api", "analytics", "activity-trends"],
+              "query": [
+                {"key": "days", "value": "30"}
+              ]
+            }
+          }
+        },
+        {
+          "name": "Admin User Engagement (Test)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/analytics/user-engagement?days=30",
+              "host": ["{{base_url}}"],
+              "path": ["api", "analytics", "user-engagement"],
+              "query": [
+                {"key": "days", "value": "30"}
+              ]
+            }
+          }
+        },
+        {
+          "name": "Delete Item (Admin Only)",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/items/:id",
+              "host": ["{{base_url}}"],
+              "path": ["api", "items", ":id"],
+              "variable": [
+                {"key": "id", "value": "ITEM_ID_HERE"}
+              ]
             }
           }
         }
