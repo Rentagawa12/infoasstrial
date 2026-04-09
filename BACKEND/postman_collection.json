@@ -73,6 +73,8 @@
                 "exec": [
                   "if (pm.response.code === 201) {",
                   "    pm.collectionVariables.set('jwt_token', pm.response.json().token);",
+                  "    console.log('✅ User registered successfully!');",
+                  "    console.log('Token saved to environment');",
                   "}"
                 ]
               }
@@ -83,7 +85,7 @@
             "header": [],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"username\": \"john_doe\",\n  \"email\": \"john@tip.edu.ph\",\n  \"password\": \"SecurePass123!\"\n}",
+              "raw": "{\n  \"username\": \"testuser_postman\",\n  \"email\": \"testuser@tip.edu.ph\",\n  \"password\": \"Test123456\"\n}",
               "options": {
                 "raw": {
                   "language": "json"
@@ -106,6 +108,10 @@
                 "exec": [
                   "if (pm.response.code === 200) {",
                   "    pm.collectionVariables.set('jwt_token', pm.response.json().token);",
+                  "    console.log('✅ User login successful!');",
+                  "    console.log('Token saved to environment');",
+                  "} else {",
+                  "    console.log('❌ Login failed - Make sure user is registered first');",
                   "}"
                 ]
               }
@@ -116,7 +122,7 @@
             "header": [],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"email\": \"john@tip.edu.ph\",\n  \"password\": \"SecurePass123!\"\n}",
+              "raw": "{\n  \"email\": \"testuser@tip.edu.ph\",\n  \"password\": \"Test123456\"\n}",
               "options": {
                 "raw": {
                   "language": "json"
