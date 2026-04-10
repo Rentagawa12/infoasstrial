@@ -1778,6 +1778,7 @@
           throw new Error(errorData.error || `Failed to update item (${res.status})`);
         }
 
+        alert('Item marked as claimed successfully.');
         loadItems();
       } catch (err) {
         console.error('Error claiming item:', err);
