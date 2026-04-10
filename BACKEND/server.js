@@ -45,6 +45,15 @@ const allowedOrigins = (process.env.CORS_ORIGINS || '')
     .map(origin => origin.trim())
     .filter(Boolean);
 const effectiveAllowedOrigins = allowedOrigins.length > 0 ? allowedOrigins : defaultAllowedOrigins;
+const normalizeOrigin = (value) => {
+    try {
+        const parsed = new URL(value);
+        return `${parsed.protocol}//${parsed.host}`.toLowerCase();
+    } catch {
+        return '';
+    }
+};
+const normalizedAllowedOrigins = new Set(effectiveAllowedOrigins.map(normalizeOrigin).filter(Boolean));
 const isTest = process.env.NODE_ENV === 'test';
 const publicLimiter = rateLimitExpress({
     windowMs: 15 * 60 * 1000,
@@ -70,7 +79,14 @@ app.use(cors({
         if (!origin) {
             return callback(null, true);
         }
-        if (effectiveAllowedOrigins.includes(origin)) {
+        const normalizedOrigin = normalizeOrigin(origin);
+        if (!normalizedOrigin) {
+            return callback(new Error('CORS origin not allowed'));
+        }
+        if (normalizedAllowedOrigins.has(normalizedOrigin)) {
+            return callback(null, true);
+        }
+        if (normalizedOrigin.endsWith('.onrender.com')) {
             return callback(null, true);
         }
         return callback(new Error('CORS origin not allowed'));
