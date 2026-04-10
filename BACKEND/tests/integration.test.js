@@ -34,7 +34,7 @@ const TEST_USER = {
 // ── Setup ─────────────────────────────────────────────────────────────────────
 beforeAll(async () => {
   process.env.JWT_SECRET = process.env.JWT_SECRET || 'test_secret_ci';
-  process.env.MONGO_URI = process.env.MONGO_URI || 'mongodb+srv://miguel:miguelito12@lostandfound.tpd9hq2.mongodb.net/?appName=lostandfound';
+  process.env.MONGO_URI = process.env.MONGO_URI || 'mongodb://localhost:27017/lostandfound_test';
 
   const serverModule = await import('../server.js');
   app = serverModule.default;
