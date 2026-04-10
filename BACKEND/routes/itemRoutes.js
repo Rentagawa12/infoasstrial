@@ -24,6 +24,12 @@ const publicLimiter = rateLimit({
   standardHeaders: true,
   legacyHeaders: false
 });
+const patchLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  max: isTest ? 10000 : 300,
+  standardHeaders: true,
+  legacyHeaders: false
+});
 const strictLimiter = rateLimit({
   windowMs: 15 * 60 * 1000,
   max: isTest ? 1000 : 30,
@@ -97,7 +103,7 @@ router.get('/', publicLimiter, getItems);
 router.post('/', publicLimiter, upload.single('image'), validateItem, postItem);
 
 // PUBLIC: PATCH status
-router.patch('/:id', publicLimiter, updateItemStatus);
+router.patch('/:id', patchLimiter, updateItemStatus);
 
 // PROTECTED: DELETE item — admin only (RBAC enforcement)
 router.delete('/:id', strictLimiter, auth, adminOnly, deleteItem);

@@ -1774,13 +1774,14 @@
         });
 
         if (!res.ok) {
-          throw new Error('Failed to update item');
+          const errorData = await res.json().catch(() => ({}));
+          throw new Error(errorData.error || `Failed to update item (${res.status})`);
         }
 
         loadItems();
       } catch (err) {
         console.error('Error claiming item:', err);
-        alert('Failed to mark item as claimed');
+        alert(err.message || 'Failed to mark item as claimed');
       }
     }
 
