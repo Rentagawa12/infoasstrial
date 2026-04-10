@@ -8,10 +8,12 @@ import {
   getUnreadCount
 } from '../controllers/notificationController.js';
 import { auth, adminOnly } from '../middleware/auth.js';
+import { rateLimit } from '../middleware/rateLimiter.js';
 
 const router = express.Router();
 
 // All notification routes require authentication
+router.use(rateLimit('authenticated'));
 router.use(auth);
 
 // GET /api/notifications - Get user's notifications
@@ -30,6 +32,6 @@ router.patch('/read-all', markAllAsRead);
 router.delete('/:id', deleteNotification);
 
 // POST /api/notifications - Create notification (admin only)
-router.post('/', adminOnly, createNotification);
+router.post('/', rateLimit('strict'), adminOnly, createNotification);
 
 export default router;

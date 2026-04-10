@@ -6,10 +6,12 @@ import {
   revokeAPIKey, 
   deleteAPIKey 
 } from '../middleware/apiKey.js';
+import { rateLimit } from '../middleware/rateLimiter.js';
 
 const router = express.Router();
 
 // All API key management routes require authentication
+router.use(rateLimit('authenticated'));
 router.use(auth);
 
 // GET /api/keys - Get all API keys for current user
@@ -23,7 +25,7 @@ router.get('/', async (req, res) => {
 });
 
 // POST /api/keys - Generate new API key
-router.post('/', async (req, res) => {
+router.post('/', rateLimit('strict'), async (req, res) => {
   try {
     const { name, permissions } = req.body;
     
@@ -48,7 +50,7 @@ router.post('/', async (req, res) => {
 });
 
 // PATCH /api/keys/:id/revoke - Revoke an API key
-router.patch('/:id/revoke', async (req, res) => {
+router.patch('/:id/revoke', rateLimit('strict'), async (req, res) => {
   try {
     const key = await revokeAPIKey(req.params.id, req.user.userId);
     res.json({ message: 'API key revoked', key });
@@ -58,7 +60,7 @@ router.patch('/:id/revoke', async (req, res) => {
 });
 
 // DELETE /api/keys/:id - Delete an API key
-router.delete('/:id', async (req, res) => {
+router.delete('/:id', rateLimit('strict'), async (req, res) => {
   try {
     await deleteAPIKey(req.params.id, req.user.userId);
     res.json({ message: 'API key deleted' });

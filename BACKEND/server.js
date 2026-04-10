@@ -19,6 +19,15 @@ dotenv.config();
 
 const PORT = process.env.PORT || 5000;
 const MONGO_URI = process.env.MONGO_URI;
+const defaultAllowedOrigins = [
+    `http://localhost:${PORT}`,
+    `http://127.0.0.1:${PORT}`,
+].filter(Boolean);
+const allowedOrigins = (process.env.CORS_ORIGINS || '')
+    .split(',')
+    .map(origin => origin.trim())
+    .filter(Boolean);
+const effectiveAllowedOrigins = allowedOrigins.length > 0 ? allowedOrigins : defaultAllowedOrigins;
 
 const app = express();
 
@@ -27,7 +36,15 @@ app.use(securityHeaders);
 
 // ── CORS ──────────────────────────────────────────────────────────────────────
 app.use(cors({
-    origin: '*',
+    origin: (origin, callback) => {
+        if (!origin) {
+            return callback(null, true);
+        }
+        if (effectiveAllowedOrigins.includes(origin)) {
+            return callback(null, true);
+        }
+        return callback(new Error('CORS origin not allowed'));
+    },
     methods: ['GET', 'POST', 'PATCH', 'DELETE'],
     allowedHeaders: ['Content-Type', 'Authorization', 'X-API-Key'],
 }));
@@ -57,16 +74,16 @@ app.use(express.static(path.join(__dirname, '../FRONTEND')));
 app.use('/uploads', express.static(uploadsDir));
 
 // ── API Routes ────────────────────────────────────────────────────────────────
-// Public routes (with rate limiting)
-app.use('/api/items', rateLimit('public'), itemRoutes);
-app.use('/api/analytics', rateLimit('public'), analyticsRoutes);
+// Route modules include endpoint-level rate limiting
+app.use('/api/items', itemRoutes);
+app.use('/api/analytics', analyticsRoutes);
 
-// Authentication routes (strict rate limiting)
-app.use('/api/auth', rateLimit('auth'), authRoutes);
+// Route modules include endpoint-level rate limiting
+app.use('/api/auth', authRoutes);
 
-// Protected routes (authenticated rate limiting)
-app.use('/api/notifications', rateLimit('authenticated'), notificationRoutes);
-app.use('/api/keys', rateLimit('authenticated'), apiKeyRoutes);
+// Route modules include endpoint-level rate limiting
+app.use('/api/notifications', notificationRoutes);
+app.use('/api/keys', apiKeyRoutes);
 
 // ── Health / Monitoring endpoint ──────────────────────────────────────────────
 app.get('/health', rateLimit('public'), (req, res) => {
@@ -80,12 +97,12 @@ app.get('/health', rateLimit('public'), (req, res) => {
 });
 
 // ── Monitoring: recent logs (admin-accessible in production) ─────────────────
-app.get('/api/monitor/logs', (req, res) => {
+app.get('/api/monitor/logs', rateLimit('strict'), (req, res) => {
     res.json({ logs: getRecentLogs() });
 });
 
 // ── Serve frontend for all non-API routes (SPA fallback) ─────────────────────
-app.get('*', (req, res) => {
+app.get('*', rateLimit('public'), (req, res) => {
     // Don't serve index.html for API routes
     if (req.path.startsWith('/api/') || req.path.startsWith('/uploads/') || req.path === '/health') {
         return res.status(404).json({ error: 'Not found' });

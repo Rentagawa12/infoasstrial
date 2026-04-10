@@ -14,6 +14,7 @@ import {
 } from '../controllers/itemController.js';
 import { auth, adminOnly } from '../middleware/auth.js';
 import { validateItem } from '../middleware/eventLogger.js';
+import { rateLimit } from '../middleware/rateLimiter.js';
 
 const router = express.Router();
 
@@ -77,15 +78,15 @@ const upload = multer({
 // ══════════════════════════════════════════════════════════════════════════════
 
 // PUBLIC: GET all items (with optional ?status= and ?q= filters)
-router.get('/', getItems);
+router.get('/', rateLimit('public'), getItems);
 
 // PUBLIC: POST new item
-router.post('/', upload.single('image'), validateItem, postItem);
+router.post('/', rateLimit('public'), upload.single('image'), validateItem, postItem);
 
 // PUBLIC: PATCH status
-router.patch('/:id', updateItemStatus);
+router.patch('/:id', rateLimit('public'), updateItemStatus);
 
 // PROTECTED: DELETE item — admin only (RBAC enforcement)
-router.delete('/:id', auth, adminOnly, deleteItem);
+router.delete('/:id', rateLimit('strict'), auth, adminOnly, deleteItem);
 
 export default router;

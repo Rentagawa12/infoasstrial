@@ -108,14 +108,27 @@ export const validateItem = (req, res, next) => {
 export const validateAuth = (req, res, next) => {
   const { email, password } = req.body;
   const errors = [];
-  if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email))
+  const normalizedEmail = typeof email === 'string' ? email.trim().toLowerCase() : '';
+  if (!normalizedEmail || !normalizedEmail.includes('@') || normalizedEmail.startsWith('@') || normalizedEmail.endsWith('@')) {
     errors.push('A valid email is required.');
+  } else {
+    const [localPart, domainPart] = normalizedEmail.split('@');
+    if (!localPart || !domainPart || !domainPart.includes('.') || domainPart.startsWith('.') || domainPart.endsWith('.')) {
+      errors.push('A valid email is required.');
+    } else {
+      const domainLabels = domainPart.split('.');
+      if (domainLabels.some(label => !label || /[^a-z0-9-]/i.test(label) || label.startsWith('-') || label.endsWith('-'))) {
+        errors.push('A valid email is required.');
+      }
+    }
+  }
   if (!password || password.length < 6)
     errors.push('Password must be at least 6 characters.');
   if (errors.length > 0) {
     eventBus.emit('security', { message: 'Auth validation failed', meta: errors, ip: req.ip });
     return res.status(422).json({ errors });
   }
+  req.body.email = normalizedEmail;
   next();
 };
 

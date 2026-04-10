@@ -1517,6 +1517,15 @@
       }
     }
 
+    function setStudentInfo(studentName, studentId) {
+      const target = document.getElementById('displayStudentInfo');
+      target.textContent = '';
+      const icon = document.createElement('i');
+      icon.className = 'fas fa-user';
+      target.appendChild(icon);
+      target.appendChild(document.createTextNode(` ${studentName} (${studentId})`));
+    }
+
     // Check server connection on page load
     window.addEventListener('load', async function() {
       await checkServerConnection();
@@ -1525,9 +1534,7 @@
       const studentName = localStorage.getItem('studentName');
       
       if (studentId && studentName) {
-        document.getElementById('displayStudentInfo').innerHTML = `
-          <i class="fas fa-user"></i> ${studentName} (${studentId})
-        `;
+        setStudentInfo(studentName, studentId);
         showMainApp();
       }
     });
@@ -1574,9 +1581,7 @@
       localStorage.setItem('studentId', studentId);
       localStorage.setItem('studentName', studentName);
       
-      document.getElementById('displayStudentInfo').innerHTML = `
-        <i class="fas fa-user"></i> ${studentName} (${studentId})
-      `;
+      setStudentInfo(studentName, studentId);
       
       const modal = document.getElementById('verificationModal');
       modal.classList.remove('show');

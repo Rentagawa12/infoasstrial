@@ -7,6 +7,21 @@ import crypto from 'crypto';
 import mongoose from 'mongoose';
 import { eventBus } from './eventLogger.js';
 
+const API_KEY_HASH_ITERATIONS = Number(process.env.API_KEY_HASH_ITERATIONS || 210000);
+const API_KEY_HASH_KEYLEN = 64;
+const API_KEY_HASH_DIGEST = 'sha512';
+const API_KEY_HASH_SALT = process.env.API_KEY_HASH_SALT || 'lost-and-found-api-key-salt';
+
+const hashApiKey = (rawApiKey) => {
+  return crypto.pbkdf2Sync(
+    rawApiKey,
+    API_KEY_HASH_SALT,
+    API_KEY_HASH_ITERATIONS,
+    API_KEY_HASH_KEYLEN,
+    API_KEY_HASH_DIGEST
+  ).toString('hex');
+};
+
 // API Key Schema
 const apiKeySchema = new mongoose.Schema({
   key: {
@@ -63,7 +78,7 @@ const APIKey = mongoose.model('APIKey', apiKeySchema);
  */
 export const generateAPIKey = async (userId, name, permissions = ['read']) => {
   const key = `lfnd_${crypto.randomBytes(32).toString('hex')}`;
-  const hashedKey = crypto.createHash('sha256').update(key).digest('hex');
+  const hashedKey = hashApiKey(key);
   
   const apiKey = new APIKey({
     key: hashedKey, // Store hashed version
@@ -107,7 +122,7 @@ export const verifyAPIKey = (requiredPermission = 'read') => {
       }
       
       // Hash the provided key
-      const hashedKey = crypto.createHash('sha256').update(apiKey).digest('hex');
+      const hashedKey = hashApiKey(apiKey);
       
       // Find the API key
       const keyRecord = await APIKey.findOne({ 

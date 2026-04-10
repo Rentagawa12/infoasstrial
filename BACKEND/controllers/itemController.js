@@ -5,8 +5,13 @@ export const getItems = async (req, res) => {
   try {
     const { status, q } = req.query;
     const query = {};
-    if (status) query.status = status;
-    if (q) query.itemName = new RegExp(q, 'i');
+    if (typeof status === 'string' && ['lost', 'found', 'claimed'].includes(status)) {
+      query.status = status;
+    }
+    if (typeof q === 'string' && q.trim()) {
+      const escapedSearch = q.trim().replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+      query.itemName = { $regex: escapedSearch, $options: 'i' };
+    }
 
     const items = await Item.find(query).sort({ createdAt: -1 });
     res.json(items);
@@ -44,10 +49,20 @@ export const postItem = async (req, res) => {
     if (req.file) {
       // If using Cloudinary, req.file.path contains the full Cloudinary URL
       // If using local storage, build the URL from the request host
-      if (req.file.path && req.file.path.includes('cloudinary.com')) {
-        // Cloudinary URL (already a full URL)
-        itemData.imageURL = req.file.path;
-      } else {
+      if (typeof req.file.path === 'string') {
+        try {
+          const parsedUrl = new URL(req.file.path);
+          const isCloudinaryHost = parsedUrl.hostname === 'res.cloudinary.com' ||
+            parsedUrl.hostname.endsWith('.cloudinary.com');
+          if (isCloudinaryHost && parsedUrl.protocol === 'https:') {
+            itemData.imageURL = parsedUrl.toString();
+          }
+        } catch (_) {
+          // Fall back to local URL construction below
+        }
+      }
+
+      if (!itemData.imageURL) {
         // Local storage - build URL dynamically
         const protocol = req.get('x-forwarded-proto') || req.protocol;
         const host = req.get('host');
@@ -87,7 +102,15 @@ export const postItem = async (req, res) => {
 
 export const updateItemStatus = async (req, res) => {
   try {
+    const allowedStatuses = ['lost', 'found', 'claimed'];
+    if (!allowedStatuses.includes(req.body?.status)) {
+      return res.status(422).json({ error: 'Invalid status value' });
+    }
+
     const updated = await Item.findByIdAndUpdate(req.params.id, { status: req.body.status }, { new: true });
+    if (!updated) {
+      return res.status(404).json({ error: 'Item not found' });
+    }
     
     // Emit event if item was claimed
     if (req.body.status === 'claimed' && updated) {

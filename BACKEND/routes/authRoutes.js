@@ -2,20 +2,21 @@ import express from 'express';
 import { register, login, getCurrentUser } from '../controllers/authController.js';
 import { auth } from '../middleware/auth.js';
 import { validateAuth } from '../middleware/eventLogger.js';
+import { rateLimit } from '../middleware/rateLimiter.js';
 
 const router = express.Router();
 
 // POST /api/auth/register  — with input validation
-router.post('/register', validateAuth, register);
+router.post('/register', rateLimit('auth'), validateAuth, register);
 
 // POST /api/auth/login  — with input validation
-router.post('/login', validateAuth, login);
+router.post('/login', rateLimit('auth'), validateAuth, login);
 
 // GET /api/auth/me  — requires JWT
-router.get('/me', auth, getCurrentUser);
+router.get('/me', rateLimit('authenticated'), auth, getCurrentUser);
 
 // POST /api/auth/verify  — simple student ID verification
-router.post('/verify', (req, res) => {
+router.post('/verify', rateLimit('auth'), (req, res) => {
     const { studentId, studentName } = req.body;
     if (!studentId || !studentName) {
         return res.status(400).json({ error: 'Student ID and Name are required' });
