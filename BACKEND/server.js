@@ -12,6 +12,7 @@ import apiKeyRoutes from './routes/apiKeyRoutes.js';
 import { requestLogger, getRecentLogs } from './middleware/eventLogger.js';
 import { initializeOrchestration } from './middleware/orchestration.js';
 import { rateLimit, mongoSanitize, xssProtection, securityHeaders } from './middleware/rateLimiter.js';
+import rateLimitExpress from 'express-rate-limit';
 import fs from 'fs';
 
 // Load environment variables
@@ -28,6 +29,19 @@ const allowedOrigins = (process.env.CORS_ORIGINS || '')
     .map(origin => origin.trim())
     .filter(Boolean);
 const effectiveAllowedOrigins = allowedOrigins.length > 0 ? allowedOrigins : defaultAllowedOrigins;
+const isTest = process.env.NODE_ENV === 'test';
+const publicLimiter = rateLimitExpress({
+    windowMs: 15 * 60 * 1000,
+    max: isTest ? 10000 : 100,
+    standardHeaders: true,
+    legacyHeaders: false
+});
+const strictLimiter = rateLimitExpress({
+    windowMs: 15 * 60 * 1000,
+    max: isTest ? 1000 : 30,
+    standardHeaders: true,
+    legacyHeaders: false
+});
 
 const app = express();
 
@@ -97,12 +111,12 @@ app.get('/health', rateLimit('public'), (req, res) => {
 });
 
 // ── Monitoring: recent logs (admin-accessible in production) ─────────────────
-app.get('/api/monitor/logs', rateLimit('strict'), (req, res) => {
+app.get('/api/monitor/logs', strictLimiter, (req, res) => {
     res.json({ logs: getRecentLogs() });
 });
 
 // ── Serve frontend for all non-API routes (SPA fallback) ─────────────────────
-app.get('*', rateLimit('public'), (req, res) => {
+app.get('*', publicLimiter, (req, res) => {
     // Don't serve index.html for API routes
     if (req.path.startsWith('/api/') || req.path.startsWith('/uploads/') || req.path === '/health') {
         return res.status(404).json({ error: 'Not found' });

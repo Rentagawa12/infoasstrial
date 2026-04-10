@@ -112,11 +112,13 @@ export const updateItemStatus = async (req, res) => {
     if (!mongoose.Types.ObjectId.isValid(req.params.id)) {
       return res.status(422).json({ error: 'Invalid item ID format' });
     }
-
-    const updated = await Item.findByIdAndUpdate(req.params.id, { status: req.body.status }, { new: true });
-    if (!updated) {
+    const itemId = new mongoose.Types.ObjectId(req.params.id);
+    const item = await Item.findById(itemId);
+    if (!item) {
       return res.status(404).json({ error: 'Item not found' });
     }
+    item.status = req.body.status;
+    const updated = await item.save();
     
     // Emit event if item was claimed
     if (req.body.status === 'claimed' && updated) {

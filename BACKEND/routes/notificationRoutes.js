@@ -1,4 +1,5 @@
 import express from 'express';
+import rateLimit from 'express-rate-limit';
 import {
   getNotifications,
   markAsRead,
@@ -8,12 +9,24 @@ import {
   getUnreadCount
 } from '../controllers/notificationController.js';
 import { auth, adminOnly } from '../middleware/auth.js';
-import { rateLimit } from '../middleware/rateLimiter.js';
 
 const router = express.Router();
+const isTest = process.env.NODE_ENV === 'test';
+const authenticatedLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  max: isTest ? 10000 : 500,
+  standardHeaders: true,
+  legacyHeaders: false
+});
+const strictLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  max: isTest ? 1000 : 30,
+  standardHeaders: true,
+  legacyHeaders: false
+});
 
 // All notification routes require authentication
-router.use(rateLimit('authenticated'));
+router.use(authenticatedLimiter);
 router.use(auth);
 
 // GET /api/notifications - Get user's notifications
@@ -32,6 +45,6 @@ router.patch('/read-all', markAllAsRead);
 router.delete('/:id', deleteNotification);
 
 // POST /api/notifications - Create notification (admin only)
-router.post('/', rateLimit('strict'), adminOnly, createNotification);
+router.post('/', strictLimiter, adminOnly, createNotification);
 
 export default router;

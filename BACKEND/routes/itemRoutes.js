@@ -5,6 +5,7 @@ import { v2 as cloudinary } from 'cloudinary';
 import { CloudinaryStorage } from 'multer-storage-cloudinary';
 import fs from 'fs';
 import { fileURLToPath } from 'url';
+import rateLimit from 'express-rate-limit';
 import Item from '../models/itemModel.js';
 import {
   getItems,
@@ -14,9 +15,21 @@ import {
 } from '../controllers/itemController.js';
 import { auth, adminOnly } from '../middleware/auth.js';
 import { validateItem } from '../middleware/eventLogger.js';
-import { rateLimit } from '../middleware/rateLimiter.js';
 
 const router = express.Router();
+const isTest = process.env.NODE_ENV === 'test';
+const publicLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  max: isTest ? 10000 : 100,
+  standardHeaders: true,
+  legacyHeaders: false
+});
+const strictLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  max: isTest ? 1000 : 30,
+  standardHeaders: true,
+  legacyHeaders: false
+});
 
 // __dirname setup for ES modules
 const __filename = fileURLToPath(import.meta.url);
@@ -78,15 +91,15 @@ const upload = multer({
 // ══════════════════════════════════════════════════════════════════════════════
 
 // PUBLIC: GET all items (with optional ?status= and ?q= filters)
-router.get('/', rateLimit('public'), getItems);
+router.get('/', publicLimiter, getItems);
 
 // PUBLIC: POST new item
-router.post('/', rateLimit('public'), upload.single('image'), validateItem, postItem);
+router.post('/', publicLimiter, upload.single('image'), validateItem, postItem);
 
 // PUBLIC: PATCH status
-router.patch('/:id', rateLimit('public'), updateItemStatus);
+router.patch('/:id', publicLimiter, updateItemStatus);
 
 // PROTECTED: DELETE item — admin only (RBAC enforcement)
-router.delete('/:id', rateLimit('strict'), auth, adminOnly, deleteItem);
+router.delete('/:id', strictLimiter, auth, adminOnly, deleteItem);
 
 export default router;

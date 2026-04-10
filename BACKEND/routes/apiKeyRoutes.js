@@ -1,4 +1,5 @@
 import express from 'express';
+import rateLimit from 'express-rate-limit';
 import { auth } from '../middleware/rbac.js';
 import { 
   generateAPIKey, 
@@ -6,12 +7,24 @@ import {
   revokeAPIKey, 
   deleteAPIKey 
 } from '../middleware/apiKey.js';
-import { rateLimit } from '../middleware/rateLimiter.js';
 
 const router = express.Router();
+const isTest = process.env.NODE_ENV === 'test';
+const authenticatedLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  max: isTest ? 10000 : 500,
+  standardHeaders: true,
+  legacyHeaders: false
+});
+const strictLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  max: isTest ? 1000 : 30,
+  standardHeaders: true,
+  legacyHeaders: false
+});
 
 // All API key management routes require authentication
-router.use(rateLimit('authenticated'));
+router.use(authenticatedLimiter);
 router.use(auth);
 
 // GET /api/keys - Get all API keys for current user
@@ -25,7 +38,7 @@ router.get('/', async (req, res) => {
 });
 
 // POST /api/keys - Generate new API key
-router.post('/', rateLimit('strict'), async (req, res) => {
+router.post('/', strictLimiter, async (req, res) => {
   try {
     const { name, permissions } = req.body;
     
@@ -50,7 +63,7 @@ router.post('/', rateLimit('strict'), async (req, res) => {
 });
 
 // PATCH /api/keys/:id/revoke - Revoke an API key
-router.patch('/:id/revoke', rateLimit('strict'), async (req, res) => {
+router.patch('/:id/revoke', strictLimiter, async (req, res) => {
   try {
     const key = await revokeAPIKey(req.params.id, req.user.userId);
     res.json({ message: 'API key revoked', key });
@@ -60,7 +73,7 @@ router.patch('/:id/revoke', rateLimit('strict'), async (req, res) => {
 });
 
 // DELETE /api/keys/:id - Delete an API key
-router.delete('/:id', rateLimit('strict'), async (req, res) => {
+router.delete('/:id', strictLimiter, async (req, res) => {
   try {
     await deleteAPIKey(req.params.id, req.user.userId);
     res.json({ message: 'API key deleted' });
