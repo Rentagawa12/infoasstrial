@@ -85,7 +85,7 @@
             "header": [],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"username\": \"testuser_postman\",\n  \"email\": \"testuser@tip.edu.ph\",\n  \"password\": \"Test123456\"\n}",
+              "raw": "{\n  \"username\": \"User1\",\n  \"email\": \"user1@tip.edu.ph\",\n  \"password\": \"Test1234567\"\n}",
               "options": {
                 "raw": {
                   "language": "json"
