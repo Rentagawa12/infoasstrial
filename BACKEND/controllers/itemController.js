@@ -1,5 +1,6 @@
 import Item from '../models/itemModel.js';
 import { eventBus } from '../middleware/eventLogger.js';
+import mongoose from 'mongoose';
 
 export const getItems = async (req, res) => {
   try {
@@ -49,12 +50,14 @@ export const postItem = async (req, res) => {
     if (req.file) {
       // If using Cloudinary, req.file.path contains the full Cloudinary URL
       // If using local storage, build the URL from the request host
+      let isCloudinaryStorage = false;
       if (typeof req.file.path === 'string') {
         try {
           const parsedUrl = new URL(req.file.path);
           const isCloudinaryHost = parsedUrl.hostname === 'res.cloudinary.com' ||
             parsedUrl.hostname.endsWith('.cloudinary.com');
           if (isCloudinaryHost && parsedUrl.protocol === 'https:') {
+            isCloudinaryStorage = true;
             itemData.imageURL = parsedUrl.toString();
           }
         } catch (_) {
@@ -73,7 +76,7 @@ export const postItem = async (req, res) => {
         filename: req.file.filename,
         path: req.file.path,
         imageURL: itemData.imageURL,
-        storage: req.file.path && req.file.path.includes('cloudinary.com') ? 'Cloudinary' : 'Local'
+        storage: isCloudinaryStorage ? 'Cloudinary' : 'Local'
       });
     }
 
@@ -105,6 +108,9 @@ export const updateItemStatus = async (req, res) => {
     const allowedStatuses = ['lost', 'found', 'claimed'];
     if (!allowedStatuses.includes(req.body?.status)) {
       return res.status(422).json({ error: 'Invalid status value' });
+    }
+    if (!mongoose.Types.ObjectId.isValid(req.params.id)) {
+      return res.status(422).json({ error: 'Invalid item ID format' });
     }
 
     const updated = await Item.findByIdAndUpdate(req.params.id, { status: req.body.status }, { new: true });
