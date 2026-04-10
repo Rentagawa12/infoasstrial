@@ -29,7 +29,7 @@ router.post('/', upload.single('image'), async (req, res) => {
       return res.status(400).json({ error: 'All fields are required.' });
     }
 
-    const imageURL = req.file ? `https://infoassproj.onrender.com/uploads/${req.file.filename}` : null;
+    const imageURL = req.file ? `https://lost-and-found-app-oshz.onrender.com/uploads/${req.file.filename}` : null;
 
     const newItem = new Item({
       itemName,
